@@ -1,0 +1,36 @@
+świetnie pozycjonowany ZEGAREK ale kłopoty z nakłądaniem dużych elementów.
+ function arrangeButtonsInClock(container) {
+        const buttons = Array.from(container.children).filter(
+          (btn) => btn !== mainButton
+        ); // Get all child buttons except for main
+        const numButtons = buttons.length; // Total buttons
+        const angleIncrement = 360 / numButtons; // Angle between buttons
+        const radius = 120; // Radius of the clock
+
+        // Ensure the container's dimensions are large enough to hold the clock
+        const maxDimension = radius * 2 + 50; // Add some padding
+        container.style.width = `${maxDimension}px`;
+        container.style.height = `${maxDimension}px`;
+        container.style.position = 'relative'; // Ensure proper positioning
+        container.style.display = 'block'; // Ensure block-level display
+        container.style.margin = '0 auto'; // Center container horizontally
+
+        const containerCenterX = maxDimension / 2;
+        const containerCenterY = maxDimension / 2;
+
+        buttons.forEach((button, index) => {
+          // Calculate the angle for the button
+          const angle = index * angleIncrement - 90; // Rotate to start at "noon"
+          const radians = (angle * Math.PI) / 180;
+
+          // Calculate the button's position relative to the center
+          const x = containerCenterX + radius * Math.cos(radians);
+          const y = containerCenterY + radius * Math.sin(radians);
+
+          // Style the button to position it absolutely
+          button.style.position = 'absolute';
+          button.style.left = `${x}px`;
+          button.style.top = `${y}px`;
+          button.style.transform = 'translate(-50%, -50%)'; // Center the button
+        });
+      }

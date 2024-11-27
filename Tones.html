@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)http://127.0.0.1:5500/temporarysnippet.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Tones</title>
+    <link rel="stylesheet" href="./Tones_files/nutka.css">
+  </head>
+  <body>
+    <div id="sterowanie_i_kontrolki">
+      <div id="kontrolki" style="display: inline-block; position: relative;"><div id="interval_buttons_container" style="width: 536.625px; height: 533.312px;"><div id="mainButton" style="position: relative; width: 120px; height: 120px; border-radius: 50%; cursor: pointer; left: 50%; top: 50%; transform: translate(-50%, -50%);"><div id="circle" style="position: absolute; width: 100%; height: 100%; background-color: rgb(0, 123, 255); border-radius: 50%; border: 0px solid red; transition: background-color 1s;"><div id="triangle" style="position: absolute; top: 50%; left: 55%; transform: translate(-50%, -50%); width: 0px; height: 0px; border-top: 20px solid transparent; border-bottom: 20px solid transparent; border-left: 35px solid white;"></div><div id="square" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 25px; height: 25px; background-color: white; display: none;"></div></div></div><div><button id="intervalButton-0" class="interval_button" style="position: absolute; left: 228.312px; top: -3.34375px;">1cz</button></div><div><button id="intervalButton-1" class="interval_button" style="position: absolute; left: 335.198px; top: 23.0012px;">2m</button></div><div><button id="intervalButton-2" class="interval_button" style="position: absolute; left: 417.599px; top: 96.0012px;">2w</button></div><div><button id="intervalButton-3" class="interval_button" style="position: absolute; left: 456.635px; top: 198.933px;">3m</button></div><div><button id="intervalButton-4" class="interval_button" style="position: absolute; left: 443.366px; top: 308.215px;">3w</button></div><div><button id="intervalButton-5" class="interval_button" style="position: absolute; left: 380.83px; top: 398.813px;">4cz</button></div><div><button id="intervalButton-6" class="interval_button" style="position: absolute; left: 283.355px; top: 449.973px;">Try</button></div><div><button id="intervalButton-7" class="interval_button" style="position: absolute; left: 173.27px; top: 449.973px;">5cz</button></div><div><button id="intervalButton-8" class="interval_button" style="position: absolute; left: 75.7945px; top: 398.813px;">6m</button></div><div><button id="intervalButton-9" class="interval_button" style="position: absolute; left: 13.2585px; top: 308.215px;">6w</button></div><div><button id="intervalButton-10" class="interval_button" style="position: absolute; left: -0.0105px; top: 198.933px;">7m</button></div><div><button id="intervalButton-11" class="interval_button" style="position: absolute; left: 39.0265px; top: 96.0012px;">7w</button></div><div><button id="intervalButton-12" class="interval_button" style="position: absolute; left: 121.426px; top: 23.0012px;">8cz</button></div><div id="the_dot" style="position: absolute; width: 0px; height: 0px; border-radius: 50%; transform: translate(-50%, -50%); left: 268.312px; top: 266.656px;"></div><svg width="350" height="350" viewBox="25 25 350 350" style="border: 1px solid black;margin: 0 auto;"><path d="M 125.00000000000003,70.0961894323342 A 150,150 0 0 1 275,70.0961894323342" fill="none" stroke="blue" stroke-width="50" stroke-linecap="round"></path><text x="200" y="50" text-anchor="middle" dominant-baseline="middle" fill="black" font-size="18">Dalej</text><path d="M 275,329.9038105676658 A 150,150 0 0 1 125.00000000000003,329.9038105676658" fill="none" stroke="red" stroke-width="50" stroke-linecap="round"></path><text x="200" y="350" text-anchor="middle" dominant-baseline="middle" fill="black" font-size="18">ABC</text></svg></div></div>
+    </div>
+    <script>
+      function addArcSegmentWithMirror(
+        parentContainer,
+        cx,
+        cy,
+        r,
+        startAngle,
+        endAngle,
+        strokeWidth,
+        text,
+        mirroredText
+      ) {
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // Helper function to create an arc
+        function createArcPath(
+          startAngle,
+          endAngle,
+          color,
+          text,
+          onClickCallback
+        ) {
+          const startRad = ((startAngle - 90) * Math.PI) / 180;
+          const endRad = ((endAngle - 90) * Math.PI) / 180;
+
+          // Calculate start and end points
+          const x1 = cx + r * Math.cos(startRad);
+          const y1 = cy + r * Math.sin(startRad);
+          const x2 = cx + r * Math.cos(endRad);
+          const y2 = cy + r * Math.sin(endRad);
+
+          // Determine the large arc flag
+          const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
+
+          // Create the SVG path data
+          const pathData = `M ${x1},${y1} A ${r},${r} 0 ${largeArcFlag} 1 ${x2},${y2}`;
+
+          // Create the arc path
+          const path = document.createElementNS(svgNS, 'path');
+          path.setAttribute('d', pathData);
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke', color);
+          path.setAttribute('stroke-width', strokeWidth);
+          path.setAttribute('stroke-linecap', 'round');
+          path.addEventListener('click', onClickCallback);
+
+          // Add the text centered on the arc
+          const midAngle = (startRad + endRad) / 2;
+          const textRadius = r;
+          const textX = cx + textRadius * Math.cos(midAngle);
+          const textY = cy + textRadius * Math.sin(midAngle);
+
+          const textElement = document.createElementNS(svgNS, 'text');
+          textElement.setAttribute('x', textX);
+          textElement.setAttribute('y', textY);
+          textElement.setAttribute('text-anchor', 'middle');
+          textElement.setAttribute('dominant-baseline', 'middle');
+          textElement.setAttribute('fill', 'black');
+          textElement.setAttribute('font-size', '18');
+          textElement.textContent = text;
+
+          return { path, textElement };
+        }
+
+        // Calculate SVG size and offsets for centering
+        const padding = strokeWidth / 2;
+        const svgSize = (r + padding) * 2;
+
+        // Center the SVG viewBox
+        const viewBoxX = cx - r - padding;
+        const viewBoxY = cy - r - padding;
+        const viewBoxSize = svgSize;
+
+        // Create the SVG container
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('width', svgSize);
+        svg.setAttribute('height', svgSize);
+        svg.setAttribute(
+          'viewBox',
+          `${viewBoxX} ${viewBoxY} ${viewBoxSize} ${viewBoxSize}`
+        );
+        svg.style.border = '1px solid black';
+
+        // Add original arc
+        const { path: originalArc, textElement: originalText } = createArcPath(
+          startAngle,
+          endAngle,
+          'blue',
+          text,
+          () => console.log('Original arc clicked!')
+        );
+        svg.appendChild(originalArc);
+        svg.appendChild(originalText);
+
+        // Add vertically mirrored arc
+        const mirroredStartAngle = 180 - endAngle;
+        const mirroredEndAngle = 180 - startAngle;
+        const { path: mirroredArc, textElement: mirroredTextElement } =
+          createArcPath(
+            mirroredStartAngle,
+            mirroredEndAngle,
+            'red',
+            mirroredText,
+            () => console.log('Mirrored arc clicked!')
+          );
+        svg.appendChild(mirroredArc);
+        svg.appendChild(mirroredTextElement);
+
+        // Append the SVG to the parent container
+        parentContainer.appendChild(svg);
+      }
+
+      const notes = [
+        'a2',
+        'a#2',
+        'h2',
+        'c3',
+        'c#3',
+        'd3',
+        'd#3',
+        'e3',
+        'f3',
+        'f#3',
+        'g3',
+        'g#3',
+        'a3',
+        'a#3',
+        'h3',
+        'c4',
+        'c#4',
+        'd4',
+        'd#4',
+        'e4',
+      ];
+
+      function createMainButton() {
+        const mainExcerciseButton = document.createElement('div');
+        mainExcerciseButton.id = 'mainButton';
+
+        // Create the circle
+        const circle = document.createElement('div');
+        circle.id = 'circle';
+        mainExcerciseButton.appendChild(circle);
+
+        // Create the triangle
+        const triangle = document.createElement('div');
+        triangle.id = 'triangle';
+        circle.appendChild(triangle);
+
+        // Create the square
+        const square = document.createElement('div');
+        square.id = 'square';
+        circle.appendChild(square);
+
+        let blinkInterval;
+        window.isPlaying = false;
+
+        // Style the button container
+        mainExcerciseButton.style.position = 'relative';
+        mainExcerciseButton.style.width = '120px';
+        mainExcerciseButton.style.height = mainExcerciseButton.style.width;
+        mainExcerciseButton.style.borderRadius = '50%';
+        // mainExcerciseButton.style.margin = 'auto 10px';
+        mainExcerciseButton.style.cursor = 'pointer'; //
+
+        // Style the circle
+        circle.style.position = 'absolute';
+        circle.style.width = '100%';
+        circle.style.height = '100%';
+        circle.style.backgroundColor = '#007bff';
+        circle.style.borderRadius = '50%';
+        circle.style.border = '0px solid red';
+        circle.style.transition = 'background-color 1s';
+
+        // Style the triangle
+        triangle.style.position = 'absolute';
+        triangle.style.top = '50%';
+        triangle.style.left = '55%';
+        triangle.style.transform = 'translate(-50%, -50%)';
+        triangle.style.width = '0';
+        triangle.style.height = '0';
+        triangle.style.borderTop = '20px solid transparent';
+        triangle.style.borderBottom = '20px solid transparent';
+        triangle.style.borderLeft = '35px solid white';
+
+        // Style the square
+        square.style.position = 'absolute';
+        square.style.top = '50%';
+        square.style.left = '50%';
+        square.style.transform = 'translate(-50%, -50%)';
+        square.style.width = '25px';
+        square.style.height = '25px';
+        square.style.backgroundColor = 'white';
+        square.style.display = 'none'; // Initially hidden
+
+        return mainExcerciseButton;
+      }
+
+      // Attach the function to the global object
+      window.createMainButton = createMainButton;
+
+      function createIntervalButton(index, label) {
+        const intervalButton = document.createElement('button');
+        intervalButton.textContent = label;
+        intervalButton.id = `intervalButton-${index}`;
+        intervalButton.classList.add('interval_button');
+
+        // Add event listener to check if the button's index matches intervalToGuess
+        intervalButton.addEventListener('mouseup', () => {
+          intervalButton.style.backgroundColor = ''; // Revert to default background on mouseup
+        });
+
+        const intervalButtonWrapper = document.createElement('div');
+        // Create the checkbox
+        // Prevent deselecting if only two checkboxes remain selected
+        // Create a wrapper for button and checkbox
+        intervalButtonWrapper.appendChild(intervalButton);
+
+        // Add the wrapper to the buttonRow
+        return intervalButtonWrapper;
+      }
+
+      function arrangeButtonsInDoubleClock(container, radius, spacing) {
+        const firstChildren = [];
+        const secondChildren = [];
+
+        // Separate first and second children, skipping mainButton
+        Array.from(container.children).forEach((child) => {
+          if (child === mainButton) return; // Skip mainButton
+          const [first, second] = child.children;
+          if (first) firstChildren.push(first);
+          if (second) secondChildren.push(second);
+        });
+
+        const arrangeCircle = (elements, radius, centerX, centerY) => {
+          const numElements = elements.length;
+          const angleIncrement = 360 / numElements;
+
+          elements.forEach((element, index) => {
+            const angle = index * angleIncrement - 90; // Start at "noon"
+            const radians = (angle * Math.PI) / 180;
+
+            const x = centerX + radius * Math.cos(radians);
+            const y = centerY + radius * Math.sin(radians);
+
+            // Account for the dimensions of the element to ensure proper centering
+            const elementWidth = element.offsetWidth;
+            const elementHeight = element.offsetHeight;
+
+            element.style.position = 'absolute';
+            element.style.left = `${x - elementWidth / 2}px`;
+            element.style.top = `${y - elementHeight / 2}px`;
+          });
+        };
+
+        // Calculate container center
+        const containerRect = container.getBoundingClientRect();
+        const containerCenterX = containerRect.width / 2;
+        const containerCenterY = containerRect.height / 2;
+
+        // Arrange children
+        arrangeCircle(
+          firstChildren,
+          radius + spacing,
+          containerCenterX,
+          containerCenterY
+        );
+        arrangeCircle(
+          secondChildren,
+          radius,
+          containerCenterX,
+          containerCenterY
+        );
+
+        // Add a dot to indicate the center
+        let theDot = document.getElementById('the_dot');
+        if (!theDot) {
+          theDot = document.createElement('div');
+          theDot.id = 'the_dot';
+          theDot.style.position = 'absolute';
+          theDot.style.width = '0px';
+          theDot.style.height = '0px';
+          theDot.style.borderRadius = '50%';
+          theDot.style.transform = 'translate(-50%, -50%)'; // Center precisely
+          container.appendChild(theDot);
+        }
+        theDot.style.left = `${containerCenterX}px`;
+        theDot.style.top = `${containerCenterY}px`;
+      }
+
+      function adjustContainerSize(container) {
+        let minX = Infinity,
+          minY = Infinity,
+          maxX = -Infinity,
+          maxY = -Infinity;
+
+        // Collect all second-level children (positioned elements)
+        const elements = [];
+        Array.from(container.children).forEach((child) => {
+          if (child !== mainButton) elements.push(...child.children);
+        });
+
+        // Calculate bounding box for elements
+        elements.forEach((element) => {
+          const rect = element.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+
+          const relativeLeft = rect.left - containerRect.left;
+          const relativeTop = rect.top - containerRect.top;
+          const relativeRight = rect.right - containerRect.left;
+          const relativeBottom = rect.bottom - containerRect.top;
+
+          minX = Math.min(minX, relativeLeft);
+          minY = Math.min(minY, relativeTop);
+          maxX = Math.max(maxX, relativeRight);
+          maxY = Math.max(maxY, relativeBottom);
+        });
+
+        // Adjust container size
+        container.style.width = `${maxX - minX}px`;
+        container.style.height = `${maxY - minY}px`;
+
+        // Calculate new center
+        const newCenterX = (maxX - minX) / 2;
+        const newCenterY = (maxY - minY) / 2;
+
+        // Move all second-level children and the dot
+        const theDot = document.getElementById('the_dot');
+        if (theDot) {
+          const oldLeft = parseFloat(theDot.style.left || 0);
+          const oldTop = parseFloat(theDot.style.top || 0);
+          const offsetX = newCenterX - oldLeft;
+          const offsetY = newCenterY - oldTop;
+
+          // Move dot
+          theDot.style.left = `${newCenterX}px`;
+          theDot.style.top = `${newCenterY}px`;
+
+          // Move elements
+          elements.forEach((element) => {
+            const currentLeft = parseFloat(element.style.left || 0);
+            const currentTop = parseFloat(element.style.top || 0);
+            element.style.left = `${currentLeft + offsetX}px`;
+            element.style.top = `${currentTop + offsetY}px`;
+          });
+        }
+      }
+
+      window.buttonLabels = [
+        '1cz',
+        '2m',
+        '2w',
+        '3m',
+        '3w',
+        '4cz',
+        'Try',
+        '5cz',
+        '6m',
+        '6w',
+        '7m',
+        '7w',
+        '8cz',
+      ];
+
+      // PRZYCISKI INTERWAŁÓW
+      const intervalButtonsContainer = document.createElement('div');
+      intervalButtonsContainer.id = 'interval_buttons_container';
+
+      // Use the global function to create and add the interval button
+      const mainButton = createMainButton();
+      mainButton.style.left = '50%';
+      mainButton.style.top = '50%';
+      mainButton.style.transform = 'translate(-50%, -50%)';
+
+      intervalButtonsContainer.appendChild(mainButton);
+
+      buttonLabels.forEach((label, index) => {
+        const elementIntervalButton = createIntervalButton(index, label);
+        intervalButtonsContainer.appendChild(elementIntervalButton);
+      });
+
+      // Append the button row to the "kontrolki" div
+      const kontrolki = document.getElementById('kontrolki');
+      kontrolki.appendChild(intervalButtonsContainer);
+      kontrolki.style.position = 'relative';
+
+      const container = document.getElementById('interval_buttons_container');
+      arrangeButtonsInDoubleClock(container, 140, 90); // Arrange elements
+      adjustContainerSize(container); // Adjust elements after resizing
+
+      addArcSegmentWithMirror(
+        container,
+        200,
+        200,
+        150,
+        -30,
+        30,
+        50,
+        'Dalej',
+        'ABC'
+      );
+    </script>
+  <!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>

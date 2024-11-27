@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Tones</title>
+    <link rel="stylesheet" href="nutka.css" />
+  </head>
+  <body>
+    <div id="all_stats">
+      <div id="stats"></div>
+      <div id="numeric_stats"></div>
+    </div>
+    <div id="sterowanie_i_kontrolki">
+      <div id="sterowanie" style="display: inline-block"></div>
+      <div id="kontrolki" style="display: inline-block"></div>
+    </div>
+    <div id="piano"></div>
+    <script src="piano2.js"></script>
+    <script src="pianocontrols.js"></script>
+    <script src="intervals.js"></script>
+    <script src="stats.js"></script>
+    <script>
+      let defSoundLength = 2;
+      let defSoundDelay = 2;
+      let defVolume = 5; // (%)
+      let defOrder = 1;
+      let defEcho = 0;
+      let defMaxError = 1;
+
+      // Global state to track repetition
+      window.note1 = null; //pierwsza nuta
+      window.note2 = null; //druga nuta
+      window.intervalToGuess = null; //interwał (pierwsza nut-druga nuta)
+      window.errorIntervalCounter = 0;
+      window.maxError = 3; // maks ilość powtórzeń
+      window.checkedIntervals = '1111111111111'; //zaznaczone interwały;
+      window.buttonLabels = [
+        '1cz',
+        '2m',
+        '2w',
+        '3m',
+        '3w',
+        '4cz',
+        'Try',
+        '5cz',
+        '6m',
+        '6w',
+        '7m',
+        '7w',
+        '8cz',
+      ];
+      window.globalIntervalStats = Array.from(
+        { length: window.buttonLabels.length },
+        () => ({
+          good: 0,
+          bad1: 0, //błędnie kliknięty interwał - pomylony skutek
+          bad2: 0, //błęnie rozpoznany interwał - pomylone źródło
+        })
+      );
+
+      // Create a container for the controls
+      const controlsContainer = document.createElement('div');
+
+      controlsContainer.style.margin = '20px';
+      {
+        // Add orderSelect
+        const orderSelectContainer = elementOrderSelect(defOrder);
+        controlsContainer.appendChild(orderSelectContainer);
+
+        // Add soundLength
+        const soundLengthContainer = elementSoundLength(defSoundLength);
+        controlsContainer.appendChild(soundLengthContainer);
+
+        // Add second sound delay
+        const soundDelayContainer = elementSoundDelay(defSoundDelay);
+        controlsContainer.appendChild(soundDelayContainer);
+
+        // Add echo
+        const echoContainer = elementEcho(defEcho);
+        controlsContainer.appendChild(echoContainer);
+
+        // Add volume slider
+        const soundVolumeContainer = elementSoundVolume(defVolume);
+        controlsContainer.appendChild(soundVolumeContainer);
+
+        // Add volume slider
+        const maxErrorContainer = elementMaxError(defMaxError);
+        controlsContainer.appendChild(maxErrorContainer);
+
+        const resetButton = document.createElement('button');
+        resetButton.textContent = 'Reset Stats';
+        resetButton.style.margin = '20px'; // Add some spacing for the button
+        resetButton.addEventListener('click', resetIntervalStats);
+        controlsContainer.appendChild(resetButton);
+      }
+      // Append the controls to the "zadania" div
+      const divSterowanie = document.getElementById('sterowanie');
+      divSterowanie.appendChild(controlsContainer);
+
+      statsChart = drawStatChart(window.globalIntervalStats);
+      document.getElementById('stats').appendChild(statsChart);
+
+      statsNumericChart = drawNumericStatContainer();
+      document.getElementById('numeric_stats').appendChild(statsNumericChart);
+
+      // PRZYCISKI INTERWAŁÓW
+      const intervalButtonsContainer = document.createElement('div');
+      intervalButtonsContainer.id = 'interval_buttons_container';
+
+      // Use the global function to create and add the interval button
+      const mainButton = createMainButton();
+      mainButton.style.left = '50%';
+      mainButton.style.top = '50%';
+      mainButton.style.transform = 'translate(-50%, -50%)';
+
+      intervalButtonsContainer.appendChild(mainButton);
+      mainButton.addEventListener('click', () => {
+        if (window.isPlaying === false) {
+          window.intervalToGuess = null;
+          return;
+        }
+        if (window.intervalToGuess !== null) return;
+        [window.note1, window.note2] = pickRandomInterval(
+          0,
+          12,
+          orderSelect,
+          20
+        );
+        window.errorIntervalCounter = 0;
+        window.refreshCharts();
+        PlayInterval(window.note1, window.note2);
+      });
+
+      function updateCheckedIntervals(visibility) {
+        for (let i = 0; i < 13; i++) {
+          const checkbox = document.getElementById(`intervalCheckbox-${i}`);
+          const button = document.getElementById(`intervalButton-${i}`);
+          if (checkbox) {
+            button.disabled = !checkbox.checked;
+          }
+          checkbox.style.display = visibility ? 'block' : 'none';
+        }
+      }
+      buttonLabels.forEach((label, index) => {
+        const elementIntervalButton = createIntervalButton(index, label);
+        intervalButtonsContainer.appendChild(elementIntervalButton);
+      });
+
+      // Append the button row to the "kontrolki" div
+      const kontrolki = document.getElementById('kontrolki');
+      kontrolki.appendChild(intervalButtonsContainer);
+      kontrolki.style.position = 'relative';
+
+      const pianoKeyboard = piano();
+      const divPiano = document.getElementById('piano');
+      divPiano.style.height = 'auto';
+      divPiano.appendChild(pianoKeyboard);
+
+      const container = document.getElementById('interval_buttons_container');
+      arrangeButtonsInDoubleClock(container, 140, 90); // Arrange elements
+      adjustContainerSize(container); // Adjust elements after resizing
+      addArcSegmentWithMirror(
+        container,
+        container.getBoundingClientRect().width / 2,
+        container.getBoundingClientRect().height / 2,
+        (container.getBoundingClientRect().height * 9) / 40,
+        -30,
+        30,
+        60,
+        'powtórz',
+        'dalej'
+      );
+      window.svg.style.display = 'none';
+    </script>
+  </body>
+</html>

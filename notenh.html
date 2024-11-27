@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="NoteContainer"></div>
+    <script>
+      const soundTable = {
+        //celowo nie mapa z uwagi na przejrzystość
+        1: ['c2'],
+        2: ['c2#', 'd2b'],
+        3: ['d2'],
+        4: ['d2#', 'e2b'],
+        5: ['e2'],
+        6: ['f2'],
+        7: ['f2#', 'g2b'],
+        8: ['g2'],
+        9: ['g2#', 'a2b'],
+        10: ['a2'],
+        11: ['a2#', 'b2'],
+        12: ['h2'],
+      };
+
+      const octaveNames = {
+        2: ['wielka'],
+        3: ['mała'],
+        4: ['razkreślna'],
+        5: ['dwukreślna'],
+        6: ['trzykreślna'],
+      };
+      const violinKeySounds = [20, 49];
+      const bassKeySounds = [1, 30];
+
+      // Function to generate consecutive elements
+      function extendSoundTable(baseTable, totalElements) {
+        const extendedTable = {};
+        const keys = Object.keys(baseTable);
+        const totalBaseElements = keys.length;
+        for (let i = 1; i <= totalElements; i++) {
+          const originalKey = ((i - 1) % totalBaseElements) + 1; // Cycle through base table
+          const octave = Math.floor((i - 1) / totalBaseElements) + 2; // Adjust the octave
+          const originalNotes = baseTable[originalKey];
+          extendedTable[i] = originalNotes.map((note) =>
+            note.replace(/\d/, octave)
+          );
+        }
+        extendedTable[49] = ['c6'];
+        return extendedTable;
+      }
+
+      // Rozbudujtabelę do 48 pozycji
+      const extendedSoundTable = extendSoundTable(soundTable, 48);
+      console.log(extendedSoundTable);
+
+      //
+      const notePosition = {}; // tabela z pozycją danej nuty
+      for (const [key, sounds] of Object.entries(extendedSoundTable)) {
+        sounds.forEach((sound) => {
+          notePosition[sound] = Number(key); // Map each sound to its key
+        });
+      }
+
+      const bassKey = 18; //f małe - klusz basowy
+      const violinKey = 32; //g razkreślne - klucz wiolinowy
+
+      //główna funkcja rysująca nutkę
+      function drawNote(pitch, key) {
+        const totalLines = 11;
+        const staffLineWidth = 1;
+        const staffSpacing = 18;
+        const noteStaff = document.createElement('div');
+        noteStaff.style.width = '70px';
+        noteStaff.style.height = `${
+          (totalLines - 1) * staffSpacing + staffLineWidth - 1
+        }px`;
+        // noteStaff.style.padding.top = 10;
+        noteStaff.style.border = '1px solid red';
+        noteStaff.style.position = 'relative';
+
+        for (let i = 1; i < totalLines - 1; i++) {
+          const div = document.createElement('div');
+
+          // Stylizacja pojedynczego diva
+          const lineWidth = i < 3 || i > 7 ? 50 : 100; // Percentage width
+          div.style.width = `${lineWidth}%`;
+          div.style.position = 'absolute';
+          div.style.left = `${(100 - lineWidth) / 2}%`; // Center the div manually
+          div.style.top = `${i * staffSpacing}px`;
+          div.style.boxSizing = 'border-box';
+          div.style.borderBottom = `${staffLineWidth}px solid black`; //   div.textContent = `Div ${i + 1}`; // Opcjonalny tekst
+          noteStaff.appendChild(div);
+        }
+
+        const div = document.createElement('div');
+
+        // Stylizacja pojedynczego diva
+        // const lineWidth = i < 3 || i > 7 ? 50 : 100; // Percentage width
+        const noteWidth = 14;
+        div.style.margin = '0';
+        div.style.padding = '0';
+        div.style.width = `${1.7 * noteWidth}px`;
+        div.style.height = `${noteWidth}px`;
+        div.style.background = 'green';
+        div.style.left = `${
+          (parseFloat(noteStaff.style.width) - 1.7 * noteWidth) / 2
+        }px`;
+        div.style.top = `${
+          staffSpacing / 2 - noteWidth / 2 + 8.5 * staffSpacing
+        }px`;
+        div.style.position = 'absolute';
+        div.style.borderRadius = '50%';
+        div.style.transform = 'rotate(-25deg)';
+
+        noteStaff.appendChild(div);
+
+        return noteStaff;
+      }
+
+      const noteContainer = document.getElementById('NoteContainer');
+      noteContainer.appendChild(drawNote('g4', violinKey));
+
+      // Access the key directly
+      console.log(notePosition['c4#']); // Output: 12
+    </script>
+  </body>
+</html>

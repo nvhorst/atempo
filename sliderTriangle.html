@@ -1,0 +1,310 @@
+///SLIDER Z TRÓJKĄCIKAMI, NIEDOPRACOWANY - TRÓJKĄTY NIEPOZYCJONOWANE PRAWIDŁOWO
+- DO DOROBIENIA JAK BĘDĘ CHCIAŁ.
+
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="axisContainer">
+      <div id="mainAxis"></div>
+    </div>
+    <script>
+      function createTriangle(
+        sideLength,
+        xPosition,
+        yPosition,
+        isHorizontal,
+        isMirrored,
+        triangleColor
+      ) {
+        const triangle = document.createElement('div');
+        triangle.style.width = '0';
+        triangle.style.height = '0';
+        triangle.style.position = 'absolute';
+        triangle.style.left = `${xPosition}px`;
+        triangle.style.top = `${yPosition}px`;
+
+        const heightFactor = 1.732; // Approximation for sqrt(3)
+
+        if (isHorizontal) {
+          triangle.style.borderTop = `${
+            sideLength / heightFactor
+          }px solid transparent`;
+          triangle.style.borderBottom = `${
+            sideLength / heightFactor
+          }px solid transparent`;
+          triangle.style.borderRight = `${sideLength}px solid ${triangleColor}`;
+          triangle.style.borderLeft = 'none';
+
+          triangle.style.transform = isMirrored
+            ? 'scaleX(-1) translate(0, -50%)'
+            : 'translate(0, -50%)';
+        } else {
+          triangle.style.borderLeft = `${
+            sideLength / heightFactor
+          }px solid transparent`;
+          triangle.style.borderRight = `${
+            sideLength / heightFactor
+          }px solid transparent`;
+          triangle.style.borderBottom = `${sideLength}px solid ${triangleColor}`;
+          triangle.style.borderTop = 'none';
+
+          triangle.style.transform = isMirrored
+            ? 'scaleY(-1) translate(-50%, 0)'
+            : 'translate(-50%, 0)';
+        }
+
+        return triangle;
+      }
+
+      const isVertical = false; // Set to true for vertical layout, false for horizontal
+      const X = 530; // Length of the main line
+      const Y = 24; // Number of segments
+      const axisColorLo = ''; //transparent
+      const axisColorIn = 'red';
+      const axisColorHi = 'yellow';
+      const axisColorMain = 'black';
+      const pointerColorNonSelected = 'black';
+      const pointerColorSelected = 'orange';
+      const segmentDimension = 20; //px (height for horizontal, width for vertical)
+      const ticksVisible = 'none';
+      const cursorFontSize = window.innerWidth / 30;
+      let currIndexLo = 5;
+      let currIndexHi = 11;
+
+      const axisContainer = document.getElementById('axisContainer');
+      axisContainer.style[isVertical ? 'height' : 'width'] = `${X}px`;
+      axisContainer.style[
+        isVertical ? 'width' : 'height'
+      ] = `${segmentDimension}px`;
+      axisContainer.style.margin = '0';
+      axisContainer.style.padding = '0';
+      axisContainer.style.position = 'relative';
+
+      const mainAxis = document.getElementById('mainAxis');
+      mainAxis.style[isVertical ? 'height' : 'width'] = `${X}px`;
+      mainAxis.style[isVertical ? 'width' : 'height'] = '2px';
+      mainAxis.style[isVertical ? 'left' : 'top'] = `${
+        segmentDimension / 2 - 1
+      }px`;
+      mainAxis.style.backgroundColor = `${axisColorMain}`;
+      mainAxis.style.margin = '0';
+      mainAxis.style.padding = '0';
+      mainAxis.style.position = 'absolute';
+
+      const unit = X / (Y - 1);
+
+      const segments = [];
+      for (let i = 0; i < Y - 1; i++) {
+        const segment = document.createElement('div');
+        segment.style.position = 'absolute';
+        segment.style[
+          isVertical ? 'width' : 'height'
+        ] = `${segmentDimension}px`;
+        segment.style[isVertical ? 'height' : 'width'] = `${unit}px`;
+        segment.style.backgroundColor = '';
+        segment.style[isVertical ? 'top' : 'left'] = `${i * unit}px`;
+        axisContainer.appendChild(segment);
+        segments.push(segment);
+      }
+
+      const ticks = [];
+      for (let i = 0; i < Y; i++) {
+        const tick = document.createElement('div');
+        tick.style.visibility = ticksVisible;
+        tick.style.position = 'absolute';
+        tick.style[isVertical ? 'height' : 'width'] = '1px';
+        tick.style[isVertical ? 'width' : 'height'] = `${segmentDimension}px`;
+        tick.style[isVertical ? 'top' : 'left'] = `${i * unit}px`;
+        axisContainer.appendChild(tick);
+        ticks.push(tick);
+      }
+
+      const indexLo = createTriangle(
+        cursorFontSize, // Side length
+        isVertical
+          ? segmentDimension - 1.33 * cursorFontSize * 0.17 // X for vertical
+          : currIndexLo * unit - cursorFontSize / 2, // X for horizontal
+        isVertical
+          ? currIndexLo * unit - cursorFontSize / 2 // Y for vertical
+          : segmentDimension - 1.33 * cursorFontSize * 0.17, // Y for horizontal
+        !isVertical, // Horizontal orientation for horizontal layout
+        false, // Not mirrored
+        pointerColorNonSelected
+      );
+      axisContainer.appendChild(indexLo);
+
+      const indexHi = createTriangle(
+        cursorFontSize, // Side length
+        isVertical
+          ? segmentDimension - 1.33 * cursorFontSize * 0.17 // X for vertical
+          : currIndexHi * unit - cursorFontSize / 2, // X for horizontal
+        isVertical
+          ? currIndexHi * unit - cursorFontSize / 2 // Y for vertical
+          : segmentDimension - 1.33 * cursorFontSize * 0.17, // Y for horizontal
+        !isVertical, // Horizontal orientation for horizontal layout
+        false, // Not mirrored
+        pointerColorNonSelected
+      );
+      axisContainer.appendChild(indexHi);
+
+      const updateColors = () => {
+        ticks.forEach((tick, index) => {
+          if (index < currIndexLo) {
+            tick.style.backgroundColor = axisColorLo;
+          } else if (index > currIndexLo && index < currIndexHi) {
+            tick.style.backgroundColor = axisColorIn;
+          } else {
+            tick.style.backgroundColor = axisColorHi;
+          }
+        });
+
+        segments.forEach((segment, index) => {
+          if (index < currIndexLo) {
+            segment.style.backgroundColor = axisColorLo;
+          } else if (index >= currIndexLo && index < currIndexHi) {
+            segment.style.backgroundColor = axisColorIn;
+          } else {
+            segment.style.backgroundColor = axisColorHi;
+          }
+        });
+      };
+
+      let isLoDragging = false;
+      let isHiDragging = false;
+      let selectedElement = null;
+
+      const updateSelection = (element) => {
+        if (selectedElement) {
+          isVertical
+            ? (selectedElement.style.borderBottom =
+                element.style.borderBottom.replace(
+                  pointerColorSelected,
+                  pointerColorNonSelected
+                ))
+            : (selectedElement.style.borderRight =
+                element.style.borderRight.replace(
+                  pointerColorSelected,
+                  pointerColorNonSelected
+                ));
+        }
+        isVertical
+          ? (element.style.borderBottom = element.style.borderBottom.replace(
+              pointerColorNonSelected,
+              pointerColorSelected
+            ))
+          : (element.style.borderRight = element.style.borderRight.replace(
+              pointerColorNonSelected,
+              pointerColorSelected
+            ));
+        selectedElement = element;
+      };
+
+      indexLo.addEventListener('mousedown', (event) => {
+        isLoDragging = true;
+        updateSelection(indexLo);
+        event.preventDefault();
+      });
+
+      indexHi.addEventListener('mousedown', (event) => {
+        isHiDragging = true;
+        updateSelection(indexHi);
+        event.preventDefault();
+      });
+
+      window.addEventListener('mouseup', () => {
+        isLoDragging = false;
+        isHiDragging = false;
+      });
+
+      window.addEventListener('mousemove', (event) => {
+        if (isLoDragging || isHiDragging) {
+          const rect = axisContainer.getBoundingClientRect();
+          let mousePos = isVertical
+            ? event.clientY - rect.top
+            : event.clientX - rect.left;
+
+          const minLimit = isLoDragging ? unit : (currIndexLo + 1) * unit;
+          const maxLimit = isLoDragging ? (currIndexHi - 1) * unit : X - unit;
+
+          mousePos = Math.max(minLimit, Math.min(mousePos, maxLimit));
+          const snappedIndex = Math.round(mousePos / unit);
+
+          const element = isLoDragging ? indexLo : indexHi;
+          const isCurrLo = isLoDragging;
+          element.style[isVertical ? 'top' : 'left'] = `${
+            snappedIndex * unit - cursorFontSize / 2
+          }px`;
+          if (isCurrLo) currIndexLo = snappedIndex;
+          else currIndexHi = snappedIndex;
+
+          updateColors();
+        }
+      });
+
+      window.addEventListener('keydown', (event) => {
+        if (!selectedElement) {
+          if (event.key === 'Tab') {
+            event.preventDefault();
+            updateSelection(indexLo);
+          }
+          return;
+        }
+
+        if (event.key === 'Tab') {
+          event.preventDefault();
+          if (!event.shiftKey) {
+            updateSelection(indexHi);
+          } else {
+            updateSelection(indexLo);
+          }
+          return;
+        }
+
+        let currIndex, element, minLimit, maxLimit;
+
+        if (selectedElement === indexLo) {
+          currIndex = currIndexLo;
+          element = indexLo;
+          minLimit = 1;
+          maxLimit = currIndexHi - 1;
+        } else if (selectedElement === indexHi) {
+          currIndex = currIndexHi;
+          element = indexHi;
+          minLimit = currIndexLo + 1;
+          maxLimit = Y - 2;
+        }
+
+        if (
+          event.key === 'ArrowLeft' ||
+          (isVertical && event.key === 'ArrowUp') ||
+          (!isVertical && event.key === 'ArrowDown')
+        ) {
+          currIndex = Math.max(minLimit, currIndex - 1);
+        } else if (
+          event.key === 'ArrowRight' ||
+          (!isVertical && event.key === 'ArrowUp') ||
+          (isVertical && event.key === 'ArrowDown')
+        ) {
+          currIndex = Math.min(maxLimit, currIndex + 1);
+        } else {
+          return;
+        }
+
+        const snappedPos = currIndex * unit;
+        element.style[isVertical ? 'top' : 'left'] = `${
+          snappedPos - cursorFontSize / 2
+        }px`;
+
+        if (selectedElement === indexLo) {
+          currIndexLo = currIndex;
+        } else if (selectedElement === indexHi) {
+          currIndexHi = currIndex;
+        }
+
+        updateColors();
+      });
+
+      updateColors(); // Initialize colors
+    </script>
+  </body>
+</html>
