@@ -162,6 +162,7 @@ function enableElementCSS(container) {
   });
 }
 
+//MAKSYMALNA ILOŚĆ BŁĘDÓW
 function elementMaxError(init, P = 15) {
   const container = document.createElement('div');
   container.id = 'elementMaxError';
@@ -172,7 +173,7 @@ function elementMaxError(init, P = 15) {
   maxErrorLabel.style.marginBottom = `${P}px`;
   container.appendChild(maxErrorLabel);
 
-  ['0', '1', '2', '3', '4', '5'].forEach((labelText, i) => {
+  ['0', '1', '2', '3', '4'].forEach((labelText, i) => {
     const radioContainer = document.createElement('div');
     radioContainer.className = 'radio-container';
     radioContainer.style.marginBottom = `${P}px`;
@@ -230,35 +231,45 @@ function elementEcho(init) {
   return container;
 }
 
-function elementSoundVolume(init) {
+function elementSoundVolume(init, P = 15) {
   const container = document.createElement('div');
   container.id = 'elementSoundVolume';
 
-  const volumeLabel = document.createElement('label');
-  volumeLabel.textContent = 'Głośność';
-  volumeLabel.className = 'main-label';
+  const soundVolumeLabel = document.createElement('label');
+  soundVolumeLabel.textContent = 'Głośność';
+  soundVolumeLabel.className = 'main-label';
+  soundVolumeLabel.style.marginBottom = `${P}px`;
+  container.appendChild(soundVolumeLabel);
 
-  const volumeValue = document.createElement('span');
-  volumeValue.className = 'range-value';
+  ['20%', '40%', '60%', '80%', '100%'].forEach((labelText, i) => {
+    const radioContainer = document.createElement('div');
+    radioContainer.className = 'radio-container';
+    radioContainer.style.marginBottom = `${P}px`;
 
-  const soundVolume = document.createElement('input');
-  soundVolume.type = 'range';
-  soundVolume.className = 'range-slider';
-  soundVolume.min = 0;
-  soundVolume.max = 100;
-  soundVolume.step = 10;
-  soundVolume.value = init;
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'soundVolume';
+    radio.value = (i + 1) * 20;
+    radio.id = `soundVolume-${i}`;
+    radio.className = 'radio-button';
 
-  soundVolume.addEventListener('input', () => {
-    volumeValue.textContent = soundVolume.value + '%';
+    if ((i + 1) * 20 === init) radio.checked = true;
+
+    const label = document.createElement('label');
+    label.textContent = labelText;
+    label.setAttribute('for', `soundVolume-${i}`);
+    label.className = 'radio-label';
+
+    radioContainer.appendChild(radio);
+    radioContainer.appendChild(label);
+    container.appendChild(radioContainer);
   });
-
-  volumeValue.textContent = soundVolume.value + '%';
-
-  container.appendChild(volumeLabel);
-  container.appendChild(volumeValue);
-  container.appendChild(soundVolume);
-
-  window.soundVolume = soundVolume;
+  container.querySelectorAll('input[name="soundVolume"]').forEach((radio) => {
+    radio.addEventListener('change', () => {
+      window.soundVolume = radio.value;
+      console.log('window.soundVolume=', window.soundVolume);
+    });
+    window.soundVolume = init;
+  });
   return container;
 }

@@ -71,7 +71,7 @@ function PlayInterval(note1, note2) {
   const firstNote = notes[note1];
   const secondNote = notes[note2];
 
-  tones.volume = soundVolume.value / 100;
+  tones.volume = soundVolume / 100;
   tones.release = soundLength * 400;
   tones.sustain = Echo.checked ? 300 : 0;
 

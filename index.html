@@ -5,14 +5,10 @@
     <link rel="stylesheet" href="nutka.css" />
   </head>
   <body>
-    <div id="all-stats">
-      <div id="stats"></div>
-      <div id="numeric-stats"></div>
-    </div>
-    <div id="sterowanie-i-kontrolki">
-      <div id="sterowanie"></div>
-      <div id="kontrolki"></div>
-    </div>
+    <div id="stats"></div>
+    <div id="numeric-stats"></div>
+    <div id="sterowanie"></div>
+    <div id="kontrolki"></div>
     <div id="piano"></div>
     <script src="piano.js"></script>
     <script src="programcontrols.js"></script>
@@ -21,7 +17,7 @@
     <script>
       let defSoundLength = 2;
       let defSoundDelay = 2;
-      let defVolume = 5; // (%)
+      let defSoundVolume = 20; // (%)
       let defOrder = 1;
       let defEcho = 0;
       let defMaxError = 1;
@@ -57,38 +53,34 @@
         })
       );
 
-      // Create a container for the controls
-      const controlsContainer = document.createElement('div');
+      const divSterowanie = document.getElementById('sterowanie');
 
-      controlsContainer.style.margin = '20px';
       {
         // Add orderSelect
         const orderSelectContainer = elementOrderSelect(defOrder);
-        controlsContainer.appendChild(orderSelectContainer);
+        divSterowanie.appendChild(orderSelectContainer);
 
         // Add soundLength
         const soundLengthContainer = elementSoundLength(defSoundLength);
-        controlsContainer.appendChild(soundLengthContainer);
+        divSterowanie.appendChild(soundLengthContainer);
 
         // Add second sound delay
         const soundDelayContainer = elementSoundDelay(defSoundDelay);
-        controlsContainer.appendChild(soundDelayContainer);
+        divSterowanie.appendChild(soundDelayContainer);
 
         // Add echo
         const echoContainer = elementEcho(defEcho);
-        controlsContainer.appendChild(echoContainer);
-
-        // Add volume slider
-        const soundVolumeContainer = elementSoundVolume(defVolume);
-        controlsContainer.appendChild(soundVolumeContainer);
+        divSterowanie.appendChild(echoContainer);
 
         // Add volume slider
         const maxErrorContainer = elementMaxError(defMaxError);
-        controlsContainer.appendChild(maxErrorContainer);
+        divSterowanie.appendChild(maxErrorContainer);
+        // Add volume slider
+        const soundVolumeContainer = elementSoundVolume(defSoundVolume);
+        divSterowanie.appendChild(soundVolumeContainer);
       }
       // Append the controls to the "zadania" div
-      const divSterowanie = document.getElementById('sterowanie');
-      divSterowanie.appendChild(controlsContainer);
+      // Append the controls to the "zadania" div
 
       statsChart = drawStatChart(window.globalIntervalStats);
       document.getElementById('stats').appendChild(statsChart);
