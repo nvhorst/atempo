@@ -1,21 +1,21 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Tones</title>
+    <title>ATempo</title>
     <link rel="stylesheet" href="nutka.css" />
   </head>
   <body>
-    <div id="all_stats">
+    <div id="all-stats">
       <div id="stats"></div>
-      <div id="numeric_stats"></div>
+      <div id="numeric-stats"></div>
     </div>
-    <div id="sterowanie_i_kontrolki">
-      <div id="sterowanie" style="display: inline-block"></div>
-      <div id="kontrolki" style="display: inline-block"></div>
+    <div id="sterowanie-i-kontrolki">
+      <div id="sterowanie"></div>
+      <div id="kontrolki"></div>
     </div>
     <div id="piano"></div>
-    <script src="piano2.js"></script>
-    <script src="pianocontrols.js"></script>
+    <script src="piano.js"></script>
+    <script src="programcontrols.js"></script>
     <script src="intervals.js"></script>
     <script src="stats.js"></script>
     <script>
@@ -85,12 +85,6 @@
         // Add volume slider
         const maxErrorContainer = elementMaxError(defMaxError);
         controlsContainer.appendChild(maxErrorContainer);
-
-        const resetButton = document.createElement('button');
-        resetButton.textContent = 'Reset Stats';
-        resetButton.style.margin = '20px'; // Add some spacing for the button
-        resetButton.addEventListener('click', resetIntervalStats);
-        controlsContainer.appendChild(resetButton);
       }
       // Append the controls to the "zadania" div
       const divSterowanie = document.getElementById('sterowanie');
@@ -100,7 +94,13 @@
       document.getElementById('stats').appendChild(statsChart);
 
       statsNumericChart = drawNumericStatContainer();
-      document.getElementById('numeric_stats').appendChild(statsNumericChart);
+      document.getElementById('numeric-stats').appendChild(statsNumericChart);
+
+      const resetButton = document.createElement('button');
+      resetButton.textContent = 'ZERUJ';
+      resetButton.id = 'reset-button';
+      resetButton.addEventListener('click', resetIntervalStats);
+      document.getElementById('numeric-stats').appendChild(resetButton);
 
       // PRZYCISKI INTERWAŁÓW
       const intervalButtonsContainer = document.createElement('div');

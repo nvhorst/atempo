@@ -167,7 +167,7 @@ function elementMaxError(init, P = 15) {
   container.id = 'elementMaxError';
 
   const maxErrorLabel = document.createElement('label');
-  maxErrorLabel.textContent = 'Ilość błędów';
+  maxErrorLabel.textContent = 'Maks. błędów';
   maxErrorLabel.className = 'main-label';
   maxErrorLabel.style.marginBottom = `${P}px`;
   container.appendChild(maxErrorLabel);
@@ -250,14 +250,14 @@ function elementSoundVolume(init) {
   soundVolume.value = init;
 
   soundVolume.addEventListener('input', () => {
-    volumeValue.textContent = soundVolume.value;
+    volumeValue.textContent = soundVolume.value + '%';
   });
 
-  volumeValue.textContent = soundVolume.value;
+  volumeValue.textContent = soundVolume.value + '%';
 
   container.appendChild(volumeLabel);
-  container.appendChild(soundVolume);
   container.appendChild(volumeValue);
+  container.appendChild(soundVolume);
 
   window.soundVolume = soundVolume;
   return container;

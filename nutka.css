@@ -1,3 +1,11 @@
+#all-stats {
+  display: flex;
+}
+
+#sterowanie-i-kontrolki {
+  display: flex;
+}
+
 #piano {
   border: 2px solid red;
   position: relative;
@@ -155,24 +163,35 @@
 #elementOrderSelect,
 #elementSoundLength,
 #elementSoundDelay,
-#elementEcho,
-#elementSoundVolume {
+#elementEcho {
   display: flex;
   flex-direction: column;
 }
 
 /* Label Styles */
 .main-label {
-  font-size: 1.5rem;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 16px 5px 16px 0;
+  display: inline-block;
+}
+
+.range-value {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 /* Radio Button Container */
 .radio-container {
   display: flex;
   align-items: center;
-  margin-bottom: 16px; /* Default spacing, adjustable via P */
+  margin-bottom: 0px; /* Default spacing, adjustable via P */
+}
+
+.radio-container input[type='radio']:checked + label {
+  font-weight: 900;
 }
 
 /* Radio Buttons */
@@ -184,7 +203,7 @@
 /* Labels for Radios */
 .radio-label {
   margin-left: 16px;
-  font-size: 1rem;
+  font-size: 0.75rem;
   cursor: pointer;
   transform: scale(1.5);
   transform-origin: left;
@@ -202,10 +221,6 @@
 }
 
 /* Range Value Display */
-.range-value {
-  margin-left: 10px;
-  font-size: 1rem;
-}
 
 #elementEcho {
   display: flex;
@@ -250,4 +265,8 @@
   -webkit-user-select: none; /* Chrome, Safari, and Edge */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none;
+}
+
+#reset-button {
+  font-size: 1.5rem;
 }

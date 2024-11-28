@@ -38,35 +38,6 @@ var tones = {
     osc.stop(sustainEnd + this.release / 1000);
   },
 
-  playFrequencyOld(freq) {
-    //problem z jedoczesnym graniem
-    const envelope = this.context.createGain();
-    const osc = this.context.createOscillator();
-
-    const currentTime = this.context.currentTime;
-
-    osc.frequency.setValueAtTime(freq, currentTime);
-
-    envelope.gain.setValueAtTime(1, currentTime);
-    envelope.gain.exponentialRampToValueAtTime(0.001, currentTime + 2);
-
-    //const sustainStart = currentTime + this.attack / 1000;
-    // const sustainEnd = sustainStart + this.sustain / 1000;
-    //envelope.gain.setValueAtTime(this.volume, sustainStart);
-
-    //envelope.gain.exponentialRampToValueAtTime(
-    //  0.001,
-    //  sustainEnd + this.release / 1000
-    //);
-    envelope.connect(this.context.destination);
-
-    osc.type = 'sine';
-    osc.connect(envelope);
-
-    osc.start();
-    osc.stop(currentTime + 2);
-  },
-
   play(NoteName) {
     this.playFrequency(
       this.startNoteFreq *

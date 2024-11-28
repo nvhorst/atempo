@@ -24,7 +24,7 @@ const notes = [
 ];
 
 function refreshCharts() {
-  const numericStatsContainer = document.getElementById('numeric_stats');
+  const numericStatsContainer = document.getElementById('numeric-stats');
   numericStatsContainer.innerHTML = ''; // Clear the current chart
   numericStatsContainer.appendChild(drawNumericStatContainer());
   const statsContainer = document.getElementById('stats');
