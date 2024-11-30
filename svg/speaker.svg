@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" width="512" height="512" fill="black">
+  <path d="M80,160 L192,160 L288,80 L288,432 L192,352 L80,352 Z" />
+  <path d="M320,192 C340,210 340,302 320,320" fill="none" stroke="black" stroke-width="20" />
+  <path d="M360,150 C400,190 400,320 360,360" fill="none" stroke="black" stroke-width="20" />
+  <path d="M400,120 C470,190 470,330 400,400" fill="none" stroke="black" stroke-width="20" />
+</svg>

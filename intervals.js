@@ -74,8 +74,8 @@ function PlayInterval(note1, note2) {
   tones.volume = soundVolume / 100;
   tones.release = soundLength * 400;
   tones.sustain = Echo.checked ? 300 : 0;
-
-  if (soundDelay == 0) {
+  console.log('window.soundDelay=', window.soundDelay);
+  if (window.soundDelay == 0) {
     keys[firstNote].dispatchEvent(new MouseEvent('mousedown'));
     keys[secondNote].dispatchEvent(new MouseEvent('mousedown'));
   } else {

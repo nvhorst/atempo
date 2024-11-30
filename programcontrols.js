@@ -2,16 +2,16 @@ function elementOrderSelect(init, P = 15) {
   const container = document.createElement('div');
   container.id = 'elementOrderSelect';
 
-  const orderLabel = document.createElement('label');
-  orderLabel.textContent = 'Kierunek';
-  orderLabel.className = 'main-label';
-  orderLabel.style.marginBottom = `${P}px`; // Apply spacing from parameter P
-  container.appendChild(orderLabel);
+  // const orderLabel = document.createElement('label');
+  // orderLabel.textContent = '';
+  // orderLabel.className = 'main-label';
+  // orderLabel.style.marginBottom = `${P}px`; // Apply spacing from parameter P
+  // container.appendChild(orderLabel);
 
   const options = [
-    { value: '1', label: 'w górę' },
-    { value: '2', label: 'w dół' },
-    { value: '3', label: 'do góry i w dół' },
+    { value: '1', label: '\u2197' }, //2191
+    { value: '2', label: '\u2198' }, //2192
+    { value: '3', label: '\u2928' },
   ];
 
   options.forEach((option) => {
@@ -31,7 +31,7 @@ function elementOrderSelect(init, P = 15) {
     const label = document.createElement('label');
     label.textContent = option.label;
     label.setAttribute('for', `orderSelect-${option.value}`);
-    label.className = 'radio-label';
+    label.className = 'radio-label-note';
 
     radioContainer.appendChild(radio);
     radioContainer.appendChild(label);
@@ -48,18 +48,19 @@ function elementOrderSelect(init, P = 15) {
   return container;
 }
 
-// DŁUGOŚĆ DŹWIĘKU
 function elementSoundLength(init, P = 15) {
   const container = document.createElement('div');
   container.id = 'elementSoundLength';
 
-  const lengthLabel = document.createElement('label');
-  lengthLabel.textContent = 'Długość dźwięku';
-  lengthLabel.className = 'main-label';
-  lengthLabel.style.marginBottom = `${P}px`;
-  container.appendChild(lengthLabel);
+  // Default SVG file paths
+  const svgFilesDefault = ['/svg/n16u.svg', '/svg/n8u.svg', '/svg/n4u.svg'];
 
-  ['krótki', 'średni', 'długi'].forEach((labelText, i) => {
+  // Alternative SVG file paths
+  const svgFilesAlternative = ['/svg/n16b.svg', '/svg/n8b.svg', '/svg/n4b.svg'];
+
+  const imgElements = []; // Store image elements for dynamic updates
+
+  svgFilesDefault.forEach((svgPath, i) => {
     const radioContainer = document.createElement('div');
     radioContainer.className = 'radio-container';
     radioContainer.style.marginBottom = `${P}px`;
@@ -74,9 +75,19 @@ function elementSoundLength(init, P = 15) {
     if (i + 1 === init) radio.checked = true;
 
     const label = document.createElement('label');
-    label.textContent = labelText;
     label.setAttribute('for', `soundLength-${i + 1}`);
-    label.className = 'radio-label';
+    label.className = 'radio-label-note';
+
+    // Add SVG to the label
+    const img = document.createElement('img');
+    img.src = svgPath;
+    img.alt = `${i + 1}`;
+    img.className = 'note-icon';
+    img.style.height = '2rem'; // Default height
+    label.appendChild(img);
+
+    // Store img reference for updates
+    imgElements.push(img);
 
     radioContainer.appendChild(radio);
     radioContainer.appendChild(label);
@@ -89,22 +100,29 @@ function elementSoundLength(init, P = 15) {
     });
   });
 
+  // Update images and heights based on `soundDelay` selection
+  window.updateSoundLengthIcons = (isAlternative) => {
+    imgElements.forEach((img, i) => {
+      img.src = isAlternative ? svgFilesAlternative[i] : svgFilesDefault[i];
+      img.style.height = isAlternative ? '4rem' : '2rem';
+    });
+  };
+
   window.soundLength = init;
   return container;
 }
 
-// ODSTĘP DO DRUGIEGO DŹWIĘKU
 function elementSoundDelay(init, P = 15) {
   const container = document.createElement('div');
   container.id = 'elementSoundDelay';
 
-  const durationLabel = document.createElement('label');
-  durationLabel.textContent = 'Przerwa';
-  durationLabel.className = 'main-label';
-  durationLabel.style.marginBottom = `${P}px`;
-  container.appendChild(durationLabel);
-
-  ['bez (dwudźwięk)', 'krótka', 'średnia', 'długa'].forEach((labelText, i) => {
+  [
+    //z uwagi na "X" na końcu wymagane jest następnie użycie mod %;
+    String.fromCodePoint(119103),
+    String.fromCodePoint(119102),
+    String.fromCodePoint(119101),
+    'X',
+  ].forEach((labelText, i) => {
     const radioContainer = document.createElement('div');
     radioContainer.className = 'radio-container';
     radioContainer.style.marginBottom = `${P}px`;
@@ -116,12 +134,12 @@ function elementSoundDelay(init, P = 15) {
     radio.id = `soundDelay-${i}`;
     radio.className = 'radio-button';
 
-    if (i === init) radio.checked = true;
+    if ((i + 1) % 4 === init) radio.checked = true;
 
     const label = document.createElement('label');
     label.textContent = labelText;
     label.setAttribute('for', `soundDelay-${i}`);
-    label.className = 'radio-label';
+    label.className = 'radio-label-note';
 
     radioContainer.appendChild(radio);
     radioContainer.appendChild(label);
@@ -130,14 +148,16 @@ function elementSoundDelay(init, P = 15) {
 
   container.querySelectorAll('input[name="soundDelay"]').forEach((radio) => {
     radio.addEventListener('change', () => {
-      window.soundDelay = parseInt(radio.value, 10);
+      window.soundDelay = (parseInt(radio.value) + 1) % 4;
+      console.log('window.soundDelay=', window.soundDelay);
+      const selectedValue = radio.id === 'soundDelay-3'; // Check if "X!" is selected
+      window.updateSoundLengthIcons(selectedValue); // Update icons dynamically
     });
   });
 
   window.soundDelay = init;
   return container;
 }
-
 function disableElementCSS(container) {
   // Disable interaction visually
   container.style.pointerEvents = 'none';
@@ -168,7 +188,7 @@ function elementMaxError(init, P = 15) {
   container.id = 'elementMaxError';
 
   const maxErrorLabel = document.createElement('label');
-  maxErrorLabel.textContent = 'Maks. błędów';
+  maxErrorLabel.textContent = '\u274c';
   maxErrorLabel.className = 'main-label';
   maxErrorLabel.style.marginBottom = `${P}px`;
   container.appendChild(maxErrorLabel);
@@ -236,7 +256,7 @@ function elementSoundVolume(init, P = 15) {
   container.id = 'elementSoundVolume';
 
   const soundVolumeLabel = document.createElement('label');
-  soundVolumeLabel.textContent = 'Głośność';
+  soundVolumeLabel.innerHTML = `<img id="icon-speaker" src="../svg/speaker.svg" alt="Głośność" />`;
   soundVolumeLabel.className = 'main-label';
   soundVolumeLabel.style.marginBottom = `${P}px`;
   container.appendChild(soundVolumeLabel);

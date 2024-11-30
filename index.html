@@ -8,7 +8,7 @@
     <div id="stats"></div>
     <div id="numeric-stats"></div>
     <div id="sterowanie"></div>
-    <div id="kontrolki"></div>
+    <div id="kontrolki" style="transform: scale(1, 1)"></div>
     <div id="piano"></div>
     <script src="piano.js"></script>
     <script src="programcontrols.js"></script>
@@ -72,9 +72,10 @@
         const echoContainer = elementEcho(defEcho);
         divSterowanie.appendChild(echoContainer);
 
-        // Add volume slider
+        // Add Error container
         const maxErrorContainer = elementMaxError(defMaxError);
         divSterowanie.appendChild(maxErrorContainer);
+
         // Add volume slider
         const soundVolumeContainer = elementSoundVolume(defSoundVolume);
         divSterowanie.appendChild(soundVolumeContainer);
@@ -162,6 +163,32 @@
         'dalej'
       );
       window.svg.style.display = 'none';
+
+      // Function to update the viewport size display
+      function updateViewportSize() {
+        const viewportText = `Width: ${window.innerWidth}px, Height: ${window.innerHeight}px`;
+        const viewportDisplay = document.getElementById('viewport-size');
+        viewportDisplay.textContent = viewportText;
+      }
+
+      // Create the element to display viewport size
+      const viewportSizeDisplay = document.createElement('div');
+      viewportSizeDisplay.id = 'viewport-size';
+      viewportSizeDisplay.style.position = 'fixed';
+      viewportSizeDisplay.style.top = '10px';
+      viewportSizeDisplay.style.right = '10px';
+      viewportSizeDisplay.style.fontSize = '16px';
+      viewportSizeDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      viewportSizeDisplay.style.color = 'white';
+      viewportSizeDisplay.style.padding = '5px 10px';
+      viewportSizeDisplay.style.borderRadius = '5px';
+      viewportSizeDisplay.style.zIndex = '1000';
+
+      document.body.appendChild(viewportSizeDisplay);
+
+      // Initial update and event listener for resize
+      updateViewportSize();
+      window.addEventListener('resize', updateViewportSize);
     </script>
   </body>
 </html>
