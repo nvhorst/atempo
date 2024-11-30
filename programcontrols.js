@@ -2,22 +2,16 @@ function elementOrderSelect(init, P = 15) {
   const container = document.createElement('div');
   container.id = 'elementOrderSelect';
 
-  // const orderLabel = document.createElement('label');
-  // orderLabel.textContent = '';
-  // orderLabel.className = 'main-label';
-  // orderLabel.style.marginBottom = `${P}px`; // Apply spacing from parameter P
-  // container.appendChild(orderLabel);
-
   const options = [
-    { value: '1', label: '\u2197' }, //2191
-    { value: '2', label: '\u2198' }, //2192
-    { value: '3', label: '\u2928' },
+    { value: '1', label: '\u2197' }, // 2197
+    { value: '2', label: '\u2198' }, // 2198
+    { value: '3', label: '\u2928' }, // 2928
   ];
 
   options.forEach((option) => {
     const radioContainer = document.createElement('div');
     radioContainer.className = 'radio-container';
-    radioContainer.style.marginBottom = `${P}px`; // Optional, override P dynamically
+    radioContainer.style.marginBottom = `${P}px`;
 
     const radio = document.createElement('input');
     radio.type = 'radio';
@@ -38,11 +32,18 @@ function elementOrderSelect(init, P = 15) {
     container.appendChild(radioContainer);
   });
 
-  container.querySelectorAll('input[name="orderSelect"]').forEach((radio) => {
-    radio.addEventListener('change', () => {
-      window.orderSelect = radio.value;
-    });
-  });
+  // Store reference for enable/disable functionality
+  window.orderSelectContainer = container;
+
+  window.disableOrderSelect = () => {
+    container.style.pointerEvents = 'none'; // Disable all interactivity
+    container.style.opacity = '0.5'; // Dim the container visually
+  };
+
+  window.enableOrderSelect = () => {
+    container.style.pointerEvents = ''; // Re-enable interactivity
+    container.style.opacity = '1'; // Restore original appearance
+  };
 
   window.orderSelect = init.toString();
   return container;
@@ -52,10 +53,7 @@ function elementSoundLength(init, P = 15) {
   const container = document.createElement('div');
   container.id = 'elementSoundLength';
 
-  // Default SVG file paths
   const svgFilesDefault = ['/svg/n16u.svg', '/svg/n8u.svg', '/svg/n4u.svg'];
-
-  // Alternative SVG file paths
   const svgFilesAlternative = ['/svg/n16b.svg', '/svg/n8b.svg', '/svg/n4b.svg'];
 
   const imgElements = []; // Store image elements for dynamic updates
@@ -78,7 +76,6 @@ function elementSoundLength(init, P = 15) {
     label.setAttribute('for', `soundLength-${i + 1}`);
     label.className = 'radio-label-note';
 
-    // Add SVG to the label
     const img = document.createElement('img');
     img.src = svgPath;
     img.alt = `${i + 1}`;
@@ -86,7 +83,6 @@ function elementSoundLength(init, P = 15) {
     img.style.height = '2rem'; // Default height
     label.appendChild(img);
 
-    // Store img reference for updates
     imgElements.push(img);
 
     radioContainer.appendChild(radio);
@@ -100,7 +96,6 @@ function elementSoundLength(init, P = 15) {
     });
   });
 
-  // Update images and heights based on `soundDelay` selection
   window.updateSoundLengthIcons = (isAlternative) => {
     imgElements.forEach((img, i) => {
       img.src = isAlternative ? svgFilesAlternative[i] : svgFilesDefault[i];
@@ -117,7 +112,6 @@ function elementSoundDelay(init, P = 15) {
   container.id = 'elementSoundDelay';
 
   [
-    //z uwagi na "X" na końcu wymagane jest następnie użycie mod %;
     String.fromCodePoint(119103),
     String.fromCodePoint(119102),
     String.fromCodePoint(119101),
@@ -150,14 +144,20 @@ function elementSoundDelay(init, P = 15) {
     radio.addEventListener('change', () => {
       window.soundDelay = (parseInt(radio.value) + 1) % 4;
       console.log('window.soundDelay=', window.soundDelay);
-      const selectedValue = radio.id === 'soundDelay-3'; // Check if "X!" is selected
-      window.updateSoundLengthIcons(selectedValue); // Update icons dynamically
+      const isAlternative = radio.id === 'soundDelay-3'; // Check if "X!" is selected
+      window.updateSoundLengthIcons(isAlternative);
+      if (isAlternative) {
+        window.disableOrderSelect(); // Disable entire OrderSelect
+      } else {
+        window.enableOrderSelect(); // Enable entire OrderSelect
+      }
     });
   });
 
   window.soundDelay = init;
   return container;
 }
+
 function disableElementCSS(container) {
   // Disable interaction visually
   container.style.pointerEvents = 'none';
