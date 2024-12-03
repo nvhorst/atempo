@@ -24,15 +24,15 @@ const notes = [
 ];
 
 function refreshCharts() {
-  const numericStatsContainer = document.getElementById('numeric-stats');
+  const numericStatsContainer = document.getElementById('numStatsDiv');
   numericStatsContainer.innerHTML = ''; // Clear the current chart
   numericStatsContainer.appendChild(drawNumericStatContainer());
-  const statsContainer = document.getElementById('stats');
+  const statsContainer = document.getElementById('chartStatsDiv');
   statsContainer.innerHTML = ''; // Clear the current chart
   statsContainer.appendChild(drawStatChart(window.globalIntervalStats));
 }
 
-function pickRandomInterval(rangeMin, rangeMax, condition, max, given = -1) {
+function pickRandomInterval(rangeMin, rangeMax, max, given = -1) {
   //od, do, w górę-w dół, maks ilość dźwięków do wyboru
   let i = 0;
   do {
@@ -52,41 +52,28 @@ function pickRandomInterval(rangeMin, rangeMax, condition, max, given = -1) {
     )
   );
   if (given === -1) window.intervalToGuess = Math.abs(num1 - num2);
-  switch (condition.toString()) {
-    case '1': // Pierwsza liczba mniejsza lub równa drugiej
-      return num1 <= num2 ? [num1, num2] : [num2, num1];
 
-    case '2': // Pierwsza liczba większa lub równa drugiej
-      return num1 >= num2 ? [num1, num2] : [num2, num1];
-
-    case '3': // Dowolna kolejność
-      return [num1, num2];
-
-    default:
-      throw new Error('Nieznany warunek. Użyj 1, 2 lub 3.');
-  }
+  return [num1, num2];
 }
 
 function PlayInterval(note1, note2) {
   const firstNote = notes[note1];
   const secondNote = notes[note2];
-
-  tones.volume = soundVolume / 100;
-  tones.release = soundLength * 400;
-  tones.sustain = Echo.checked ? 300 : 0;
-  console.log('window.soundDelay=', window.soundDelay);
-  if (window.soundDelay == 0) {
+  tones.volume = 20 / 100; //
+  tones.release = window.soundLength * 400;
+  tones.sustain = 0;
+  if (window.soundOrder === 'both') {
     keys[firstNote].dispatchEvent(new MouseEvent('mousedown'));
     keys[secondNote].dispatchEvent(new MouseEvent('mousedown'));
   } else {
     keys[firstNote].dispatchEvent(new MouseEvent('mousedown'));
     setTimeout(() => {
       keys[secondNote].dispatchEvent(new MouseEvent('mousedown'));
-    }, 300 + (soundDelay - 1) * 500); //300 800 1100 - dopasowane do długości dźwięków
+    }, 300 + (window.soundDelay - 1) * 500); //300 800 1100 - dopasowane do długości dźwięków
   }
 }
 
-function createMainButton() {
+function createMainPlayIntervalButton() {
   const mainExcerciseButton = document.createElement('div');
   mainExcerciseButton.id = 'mainButton';
 
@@ -108,33 +95,25 @@ function createMainButton() {
   let blinkInterval;
   window.isPlaying = false;
 
-  // Style the button container
-  mainExcerciseButton.style.position = 'relative';
-  mainExcerciseButton.style.width = '120px';
-  mainExcerciseButton.style.height = mainExcerciseButton.style.width;
-  mainExcerciseButton.style.borderRadius = '50%';
-  // mainExcerciseButton.style.margin = 'auto 10px';
-  mainExcerciseButton.style.cursor = 'pointer'; //
-
   // Style the circle
-  circle.style.position = 'absolute';
-  circle.style.width = '100%';
-  circle.style.height = '100%';
-  circle.style.backgroundColor = '#007bff';
-  circle.style.borderRadius = '50%';
-  circle.style.border = '0px solid red';
-  circle.style.transition = 'background-color 1s';
+  // circle.style.position = 'absolute';
+  // circle.style.width = '100%';
+  // circle.style.height = '100%';
+  // circle.style.backgroundColor = '#007bff';
+  // circle.style.borderRadius = '50%';
+  // circle.style.border = '0px solid red';
+  // circle.style.transition = 'background-color 1s';
 
   // Style the triangle
-  triangle.style.position = 'absolute';
-  triangle.style.top = '50%';
-  triangle.style.left = '55%';
-  triangle.style.transform = 'translate(-50%, -50%)';
-  triangle.style.width = '0';
-  triangle.style.height = '0';
-  triangle.style.borderTop = '20px solid transparent';
-  triangle.style.borderBottom = '20px solid transparent';
-  triangle.style.borderLeft = '35px solid white';
+  // triangle.style.position = 'absolute';
+  // triangle.style.top = '50%';
+  // triangle.style.left = '55%';
+  // triangle.style.transform = 'translate(-50%, -50%)';
+  // triangle.style.width = '0';
+  // triangle.style.height = '0';
+  // triangle.style.borderTop = '20px solid transparent';
+  // triangle.style.borderBottom = '20px solid transparent';
+  // triangle.style.borderLeft = '35px solid white';
 
   // Style the square
   square.style.position = 'absolute';
@@ -184,7 +163,7 @@ function createMainButton() {
 }
 
 // Attach the function to the global object
-window.createMainButton = createMainButton;
+window.createMainPlayIntervalButton = createMainPlayIntervalButton;
 
 function scheduleReplay() {
   setTimeout(() => {
@@ -207,7 +186,7 @@ function createIntervalButton(index, label) {
   const intervalButton = document.createElement('button');
   intervalButton.textContent = label;
   intervalButton.id = `intervalButton-${index}`;
-  intervalButton.classList.add('interval_button');
+  intervalButton.classList.add('interval-button');
 
   // Add event listener to check if the button's index matches intervalToGuess
   intervalButton.addEventListener('mouseup', () => {
@@ -283,11 +262,9 @@ function createIntervalButton(index, label) {
   // Create the checkbox
   const intervalCheckbox = document.createElement('input');
   intervalCheckbox.type = 'checkbox';
+  intervalCheckbox.classList.add('checkbox-interval-style');
   intervalCheckbox.id = `intervalCheckbox-${index}`;
   intervalCheckbox.checked = 'true';
-  intervalCheckbox.style.display = 'block'; // Ensure it appears below the button
-
-  // Prevent deselecting if only two checkboxes remain selected
   intervalCheckbox.addEventListener('change', (event) => {
     let intervalCheckedCount = 0;
     window.checkedIntervals = '';
@@ -319,135 +296,60 @@ function createIntervalButton(index, label) {
   intervalButtonWrapper.appendChild(intervalButton);
   intervalButtonWrapper.appendChild(intervalCheckbox);
 
-  intervalCheckbox.style.margin = 'auto';
-  intervalCheckbox.style.display = 'inline-block';
-  intervalCheckbox.style.transform = 'scale(2.5)';
   intervalButtonWrapper.style.whiteSpace = 'nowrap'; //żeby nie wyjeżdżało
 
   // Add the wrapper to the buttonRow
   return intervalButtonWrapper;
 }
 
-function arrangeButtonsInDoubleClock(container, radius, spacing) {
-  const firstChildren = [];
-  const secondChildren = [];
-
-  // Separate first and second children, skipping mainButton
-  Array.from(container.children).forEach((child) => {
-    if (child === mainButton) return; // Skip mainButton
-    const [first, second] = child.children;
-    if (first) firstChildren.push(first);
-    if (second) secondChildren.push(second);
-  });
+const arrangeButtonsInDoubleClock = (container, radius1, radius2) => {
+  const collectChildren = (container, mainButton) => {
+    const firstChildren = [];
+    const secondChildren = [];
+    Array.from(container.children).forEach((child) => {
+      if (child === mainButton) return; // Skip mainButton
+      const [first, second] = child.children;
+      if (first) firstChildren.push(first);
+      if (second) secondChildren.push(second);
+    });
+    return { firstChildren, secondChildren };
+  };
 
   const arrangeCircle = (elements, radius, centerX, centerY) => {
-    const numElements = elements.length;
-    const angleIncrement = 360 / numElements;
-
+    const angleIncrement = 360 / elements.length;
     elements.forEach((element, index) => {
-      const angle = index * angleIncrement - 90; // Start at "noon"
-      const radians = (angle * Math.PI) / 180;
+      const angle = (index * angleIncrement - 90) * (Math.PI / 180); // Radians
+      const x = 2 * centerX + radius * Math.cos(angle);
+      const y = 2 * centerY + radius * Math.sin(angle);
 
-      const x = centerX + radius * Math.cos(radians);
-      const y = centerY + radius * Math.sin(radians);
+      const elementWidth =
+        element.offsetWidth ||
+        parseInt(window.getComputedStyle(element).width, 10);
+      const elementHeight =
+        element.offsetHeight ||
+        parseInt(window.getComputedStyle(element).height, 10);
 
-      // Account for the dimensions of the element to ensure proper centering
-      const elementWidth = element.offsetWidth;
-      const elementHeight = element.offsetHeight;
-
-      element.style.position = 'absolute';
-      element.style.left = `${x - elementWidth / 2}px`;
-      element.style.top = `${y - elementHeight / 2}px`;
+      element.style.left = `${(x - elementHeight) / 2 / window.unitToPixel}${
+        window.mainUnit
+      }`;
+      element.style.top = `${(y - elementHeight) / 2 / window.unitToPixel}${
+        window.mainUnit
+      }`;
     });
   };
 
-  // Calculate container center
-  const containerRect = container.getBoundingClientRect();
-  const containerCenterX = containerRect.width / 2;
-  const containerCenterY = containerRect.height / 2;
-
-  // Arrange children
-  arrangeCircle(
-    firstChildren,
-    radius + spacing,
-    containerCenterX,
-    containerCenterY
+  // Extract container center and child groups
+  const { firstChildren, secondChildren } = collectChildren(
+    container,
+    mainButton
   );
-  arrangeCircle(secondChildren, radius, containerCenterX, containerCenterY);
+  const { width, height } = container.getBoundingClientRect();
+  let centerX = width / 2;
+  let centerY = height / 2;
 
-  // Add a dot to indicate the center
-  let theDot = document.getElementById('the_dot');
-  if (!theDot) {
-    theDot = document.createElement('div');
-    theDot.id = 'the_dot';
-    theDot.style.position = 'absolute';
-    theDot.style.width = '0px';
-    theDot.style.height = '0px';
-    theDot.style.borderRadius = '50%';
-    theDot.style.transform = 'translate(-50%, -50%)'; // Center precisely
-    container.appendChild(theDot);
-  }
-  theDot.style.left = `${containerCenterX}px`;
-  theDot.style.top = `${containerCenterY}px`;
-}
-
-function adjustContainerSize(container) {
-  let minX = Infinity,
-    minY = Infinity,
-    maxX = -Infinity,
-    maxY = -Infinity;
-
-  // Collect all second-level children (positioned elements)
-  const elements = [];
-  Array.from(container.children).forEach((child) => {
-    if (child !== mainButton) elements.push(...child.children);
-  });
-
-  // Calculate bounding box for elements
-  elements.forEach((element) => {
-    const rect = element.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-
-    const relativeLeft = rect.left - containerRect.left;
-    const relativeTop = rect.top - containerRect.top;
-    const relativeRight = rect.right - containerRect.left;
-    const relativeBottom = rect.bottom - containerRect.top;
-
-    minX = Math.min(minX, relativeLeft);
-    minY = Math.min(minY, relativeTop);
-    maxX = Math.max(maxX, relativeRight);
-    maxY = Math.max(maxY, relativeBottom);
-  });
-
-  // Adjust container size
-  container.style.width = `${maxX - minX}px`;
-  container.style.height = `${maxY - minY}px`;
-
-  // Calculate new center
-  const newCenterX = (maxX - minX) / 2;
-  const newCenterY = (maxY - minY) / 2;
-
-  // Move all second-level children and the dot
-  const theDot = document.getElementById('the_dot');
-  if (theDot) {
-    const oldLeft = parseFloat(theDot.style.left || 0);
-    const oldTop = parseFloat(theDot.style.top || 0);
-    const offsetX = newCenterX - oldLeft;
-    const offsetY = newCenterY - oldTop;
-
-    // Move dot
-    theDot.style.left = `${newCenterX}px`;
-    theDot.style.top = `${newCenterY}px`;
-
-    // Move elements
-    elements.forEach((element) => {
-      const currentLeft = parseFloat(element.style.left || 0);
-      const currentTop = parseFloat(element.style.top || 0);
-      element.style.left = `${currentLeft + offsetX}px`;
-      element.style.top = `${currentTop + offsetY}px`;
-    });
-  }
-}
+  arrangeCircle(firstChildren, radius2, centerX, centerY);
+  arrangeCircle(secondChildren, radius1, centerX, centerY);
+};
 
 function addArcSegmentWithMirror(
   parentContainer,
@@ -489,7 +391,7 @@ function addArcSegmentWithMirror(
     // Create the arc path
     const path = document.createElementNS(svgNS, 'path');
     path.setAttribute('id', btn_label);
-    path.setAttribute('class', 'btn_sector');
+    path.setAttribute('class', 'btn-sector');
     path.setAttribute('stroke', color);
     path.setAttribute('d', pathData);
     path.setAttribute('stroke-width', strokeWidth);
@@ -503,13 +405,12 @@ function addArcSegmentWithMirror(
     const textY = cy + textRadius * Math.sin(midAngle);
 
     const textElement = document.createElementNS(svgNS, 'text');
-    textElement.setAttribute('class', 'btn_sector_text');
+    textElement.setAttribute('class', 'btn-sector-text');
     textElement.setAttribute('x', textX);
     textElement.setAttribute('y', textY);
     textElement.setAttribute('text-anchor', 'middle');
     textElement.setAttribute('dominant-baseline', 'middle');
     textElement.setAttribute('fill', 'black');
-    textElement.setAttribute('font-size', '18');
     textElement.setAttribute('pointer-events', 'auto');
     textElement.textContent = text;
 
@@ -526,7 +427,7 @@ function addArcSegmentWithMirror(
     return { path, textElement };
   }
 
-  const padding = strokeWidth / 2;
+  const padding = parseFloat(strokeWidth) / 2;
   const svgSize = (r + padding) * 2;
 
   // Create the SVG container
@@ -599,6 +500,3 @@ function addArcSegmentWithMirror(
   // Append the SVG to the parent container
   parentContainer.appendChild(svg);
 }
-
-// Call the function to create an arc
-// Create an arc between hour 10 (-60°) and hour 14 (+60°), with noon (0°) at the top

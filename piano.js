@@ -19,7 +19,7 @@ var tones = {
       this.volume,
       currentTime + this.attack / 1000
     );
-
+    this.sustain = 300;
     const sustainStart = currentTime + this.attack / 1000;
     const sustainEnd = sustainStart + this.sustain / 1000;
     envelope.gain.setValueAtTime(this.volume, sustainStart);

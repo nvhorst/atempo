@@ -5,9 +5,7 @@
 }
 
 body {
-  width: 1900px;
-  height: 900px;
-  border: 4px solid violet;
+  /* border: 4px solid violet; */
 }
 
 #all-stats {
@@ -18,12 +16,10 @@ body {
   display: flex;
 }
 
-#sterowanie {
+#controlsDiv {
   display: inline-flex;
-  /* background: orange; */
-  flex-direction: row;
-  column-gap: 2rem;
-  /* border: 9px solid green; */
+  flex-direction: column;
+  /* column-gap */
 }
 
 #piano {
@@ -47,29 +43,21 @@ body {
   margin-left: 10px;
 }
 
-#interval_buttons_container {
+#interval-buttons-container {
   position: relative;
-  border: 5px dashed pink;
+  border: 2px dashed pink;
+  /* background: cyan; */
 }
 
-.interval_button {
-  border-radius: 50%;
+.interval-button {
   display: inline-block;
+  border-radius: 50%;
   border-width: 0.5px;
-  width: 5rem;
-  height: 5rem;
-  font-size: 2rem;
-  /* transform: scale(2.5); */
-  /* margin-right: 10px; */
   background-color: #fff4cd;
-}
-
-@media screen and (max-width: 600px) and (max-height: 800px) {
-  .interval_button {
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.5rem;
-  }
+  position: absolute;
+  /* height */
+  /* width */
+  /* font-size */
 }
 
 .interval_button:hover {
@@ -177,9 +165,9 @@ body {
 
 .stat-interval-label {
   text-align: center;
-  font-size: 1rem;
   color: black;
   width: 100%;
+  /* font-size: 1rem; */
 }
 
 /* ELEMENTY KONTROLNE */
@@ -187,7 +175,6 @@ body {
 #elementOrderSelect,
 #elementSoundLength,
 #elementSoundDelay,
-#elementEcho,
 #elementMaxError,
 #elementSoundVolume {
   display: flex;
@@ -195,57 +182,84 @@ body {
   /* border: 3px dashed blue; */
 }
 
-/* Label Styles */
-.main-label {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 auto;
-  /* margin: 16px 5px 16px 0; */
-  display: inline-block;
+#elementControlContainer {
+  display: flex;
+  flex-direction: row;
+  /* gap */
 }
 
-.range-value {
-  display: inline-block;
-  margin-left: 10px;
-  font-size: 1.2rem;
+.control-button {
+  display: flex;
+  border-radius: 25%;
+  background: greenyellow;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+}
+
+.control-container {
+  display: flex;
+  flex-direction: column;
+  /* gap */
+}
+
+.control-button-label {
+  /* margin: 0 0 auto; */
+
+  /* display: inline-block; */
+  /* font-size */
+}
+
+/* LABEL STYLES */
+.main-label {
   font-weight: 700;
+  margin: 0 0 auto;
+  display: inline-block;
+  /* font-size */
 }
 
 /* Radio Button Container */
-.radio-container {
+.radio-container,
+#elementEcho {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  /* border: 2px solid yellow; */
   border-radius: 25%;
   background: greenyellow;
-  width: 6rem;
-  height: 6rem;
-  padding: 1rem; /* Default spacing, adjustable via P */
+  flex-direction: row;
+  /* width */
+  /* height */
+  /* padding */
+}
+
+#elementEcho {
+  background: hsl(204, 100%, 68%);
+}
+
+.echo-label {
+  font-weight: 700;
+  padding: 0;
+  margin: -5px;
+  /* font-size */
 }
 
 /* .radio-container input[type='radio']:checked + label {
   font-weight: 900;
 } */
 
+.checkbox-interval-style {
+  background-color: red;
+  margin: auto;
+  display: inline-block;
+  position: absolute;
+  /* width */
+  /* height */
+}
+
 /* Radio Buttons */
 .radio-button {
   transform: scale(1.5);
   cursor: pointer;
-}
-
-/* Labels for Radios */
-.radio-label,
-.radio-label-note {
-  margin-left: 1rem;
-  font-size: 2.5rem;
-  cursor: pointer;
-  transform: scale(1.2);
-  /* transform-origin: left; */
-}
-
-.radio-label-note {
-  /* font-size: 2.5rem; */
 }
 
 /* Checkbox Styles */
@@ -254,29 +268,12 @@ body {
   transform: scale(1.5);
 }
 
-/* Range Slider */
-.range-slider {
-  width: 100%;
-}
-
-/* Range Value Display */
-
-#elementEcho {
-  display: flex;
-  flex-direction: row;
-  justify-items: end;
-  align-items: center;
-  gap: 10px;
+.control-button-note-icon {
+  /* height */
 }
 
 #ring {
   pointer-events: none;
-}
-
-.sector {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.1); /* Fallback color for the sectors */
-  clip-path: polygon(50% 0%, 0% 0%, 0% 50%, 100% 50%, 100% 0%); /* Default */
 }
 
 .inner-spacing {
@@ -289,28 +286,158 @@ body {
   stroke: blue;
 }
 
-.btn_sector {
+.btn-sector {
   /* fill: none; */
   stroke-linecap: round;
 }
 
-.btn_sector_text {
+.btn-sector-text {
   font-family: Arial, Helvetica, sans-serif;
   text-anchor: middle;
   dominant-baseline: middle;
   fill: black;
-  font-size: 1.8rem;
   user-select: none; /* Standard */
   -webkit-user-select: none; /* Chrome, Safari, and Edge */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none;
+  /* font-size */
 }
 
-#reset-button {
-  font-size: 1.5rem;
+#reset-btn {
+  /* font-size */
+  background-color: red;
+  color: white;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10%;
 }
 
 #icon-speaker {
-  width: 2rem;
-  heigth: 2rem;
+  width: 3rem;
+  height: 2rem;
+  color: blue;
+}
+
+/* MAIN PLAY INTERVAL BUTTON */
+
+#mainButton {
+  position: relative;
+  cursor: pointer;
+  /* height */
+  /* width */
+}
+
+#circle {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #007bff;
+  border-radius: 50%;
+  border: 0px solid red;
+  transition: background-color 1s;
+}
+
+#triangle {
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-top: solid transparent;
+  border-bottom: solid transparent;
+  border-left: solid white;
+  /* border-top-width: 40px; */
+  /* border-bottom-width: 40px; */
+  /* border-left-width: 70px; */
+}
+
+#square {
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  display: none;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  height: 100%;
+}
+
+td {
+  border: 1px solid black;
+  text-align: center;
+  vertical-align: middle;
+  padding: 20px;
+  /* display: flex; */
+}
+
+.toggle-button {
+  margin: 10px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.toggle-button:hover {
+  background-color: #0056b3;
+}
+
+#portraitView > tbody > tr:nth-child(1) {
+  height: 24vh;
+  background-color: greenyellow;
+  padding: 0;
+}
+
+#portraitView > tbody > tr:nth-child(2) {
+  height: 38vh;
+  background-color: yellow;
+  padding: 0;
+}
+#portraitView > tbody > tr:nth-child(3) {
+  height: 38vh;
+  background-color: orange;
+  padding: 0;
+}
+
+#landscapeView > tbody > tr:nth-child(1) > td:nth-child(1) {
+  background-color: pink;
+  height: 33.33vh;
+  width: 66%;
+}
+#landscapeView > tbody > tr:nth-child(1) > td:nth-child(2) {
+  background-color: violet;
+}
+#landscapeView > tbody > tr:nth-child(2) {
+  background-color: green;
+  height: 66.67vh;
+}
+
+#mainContainer,
+#statContainer {
+  /* width:60%; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: baseline;
+  position: relative;
+  /* margin:0; */
+  /* padding:0; */
+}
+#mainDiv,
+#statsDiv,
+#controlsDiv {
+  display: flex;
+  flex-direction: row;
+  /* background:red; */
+  margin: 0 0 auto;
+  position: relative;
 }
