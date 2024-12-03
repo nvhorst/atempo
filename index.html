@@ -101,12 +101,13 @@
 
       // layouts
 
+      window.isPortrait = window.innerHeight > window.innerWidth;
       window.mainUnit = 'vw';
       window.mainUnitInt = '%';
       window.mainRefSize = 2.4;
       window.radiusLarge = 12.5;
       window.radiusSmall = 0.6 * window.radiusLarge;
-      window.strokeWidth = `${4 + window.isPortrait * 0.9}${window.mainUnit}`;
+      window.strokeWidth = `${2 + window.isPortrait * 0.9}${window.mainUnit}`;
       window.unitToPixel = (1 / 100) * window.innerWidth;
       let intervalButtonSize = 2.5;
       window.elementCSS = [
@@ -127,9 +128,7 @@
         ['#triangle', 'border-top-width', `${mainRefSize * 1}${mainUnit}`], //2
         ['#triangle', 'border-bottom-width', `${mainRefSize * 1}${mainUnit}`], //2
         ['#triangle', 'border-left-width', `${mainRefSize * 1.8}${mainUnit}`], //2
-        ['.btn-sector-text', 'font-size', `${mainRefSize * 2}${mainUnit}`], //2.5
-        ['.btn-sector-text', 'font-size', `${mainRefSize * 2}${mainUnit}`], //2.5
-        ['.btn-sector-text', 'font-size', `${mainRefSize * 2}${mainUnit}`], //2.5
+        ['.btn-sector-text', 'font-size', `${mainRefSize * 1}${mainUnit}`], //2.5
         ['.checkbox-interval-style', 'width', `${mainRefSize * 1}${mainUnit}`],
         ['.checkbox-interval-style', 'height', `${mainRefSize * 1}${mainUnit}`],
 
@@ -170,7 +169,6 @@
       }
 
       function drawMainWindow() {
-        window.isPortrait = window.innerHeight < window.innerWidth;
         const toggleLayout = () => {
           const portraitHTML = `<table id="portraitView">
                                 <tr><td colspan="3" id="pianoDiv"></td></tr>
@@ -180,7 +178,7 @@
           const landscapeHTML = `<table id="landscapeView">
                                   <tr>
                                     <td id="pianoDiv" colspan="2"></td>
-                                    <td rowspan="3"><table><tr><td id="chartStatsDiv"></td></tr><tr><td id="numStatsDiv"></td></tr></table></td></tr><tr><td colspan="2"><table><tr><td id="controlsDiv"></td><td id="mainDiv"></td></tr></table></td></tr></table>`;
+                                    <td rowspan="3"><table><tr><td id="chartStatsDiv"></td></tr><tr><td id="numStatsDiv"></td></tr></table></td></tr><tr><td colspan="2"><table><tr><td id="mainDiv"></td><td id="controlsDiv"></td></tr></table></td></tr></table>`;
 
           document.body.innerHTML = `
                                     ${
@@ -225,7 +223,7 @@
         divNumStats.appendChild(statsNumeric);
 
         const resetButton = document.createElement('button');
-        resetButton.textContent = 'ZERUJ';
+        resetButton.textContent = '=0=';
         resetButton.id = 'reset-btn';
         resetButton.addEventListener('click', resetIntervalStats);
         divNumStats.appendChild(resetButton);
@@ -238,7 +236,7 @@
         const mainIntervalPlayButton = createMainPlayIntervalButton();
         mainIntervalPlayButton.style.left = '50%';
         mainIntervalPlayButton.style.top = '50%';
-        mainIntervalPlayButton.style.border = '3px solid violet';
+        // mainIntervalPlayButton.style.border = '3px solid violet';
         mainIntervalPlayButton.style.transform = 'translate(-50%, -50%)';
 
         intervalButtonsContainer.appendChild(mainIntervalPlayButton);
@@ -311,11 +309,6 @@
           }
 
           window.errorIntervalCounter = 0;
-          console.log('num1=', num1);
-          console.log('num2=', num2);
-          console.log('window.soundLength=', window.soundLength);
-          console.log('window.soundDelay=', window.soundDelay);
-          console.log('window.soundOrder=', window.soundOrder);
           window.refreshCharts(); //
           PlayInterval(window.note1, window.note2);
         });
@@ -350,12 +343,12 @@
           intervalButtonsContainer,
           intervalButtonsContainer.getBoundingClientRect().width / 2,
           intervalButtonsContainer.getBoundingClientRect().height / 2,
-          (intervalButtonsContainer.getBoundingClientRect().height * 9) / 40,
+          intervalButtonsContainer.getBoundingClientRect().height / 4,
           -30,
           30,
           window.strokeWidth,
-          'powtórz',
-          'dalej'
+          '\u21BA',
+          'X'
         );
         window.svg.style.display = 'none';
 
@@ -387,6 +380,8 @@
       // Initial update and event listener for resize
       updateViewportSize();
       window.addEventListener('resize', () => {
+        window.unitToPixel = (1 / 100) * window.innerWidth;
+        window.isPortrait = window.innerHeight > window.innerWidth;
         drawMainWindow();
         updateViewportSize;
       });

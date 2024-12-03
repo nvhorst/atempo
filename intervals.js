@@ -319,8 +319,8 @@ const arrangeButtonsInDoubleClock = (container, radius1, radius2) => {
     const angleIncrement = 360 / elements.length;
     elements.forEach((element, index) => {
       const angle = (index * angleIncrement - 90) * (Math.PI / 180); // Radians
-      const x = 2 * centerX + radius * Math.cos(angle);
-      const y = 2 * centerY + radius * Math.sin(angle);
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
 
       const elementWidth =
         element.offsetWidth ||
@@ -329,7 +329,7 @@ const arrangeButtonsInDoubleClock = (container, radius1, radius2) => {
         element.offsetHeight ||
         parseInt(window.getComputedStyle(element).height, 10);
 
-      element.style.left = `${(x - elementHeight) / 2 / window.unitToPixel}${
+      element.style.left = `${(x - elementWidth) / 2 / window.unitToPixel}${
         window.mainUnit
       }`;
       element.style.top = `${(y - elementHeight) / 2 / window.unitToPixel}${
@@ -343,9 +343,9 @@ const arrangeButtonsInDoubleClock = (container, radius1, radius2) => {
     container,
     mainButton
   );
-  const { width, height } = container.getBoundingClientRect();
-  let centerX = width / 2;
-  let centerY = height / 2;
+  const { width, height, left, top } = container.getBoundingClientRect();
+  let centerX = width;
+  let centerY = height;
 
   arrangeCircle(firstChildren, radius2, centerX, centerY);
   arrangeCircle(secondChildren, radius1, centerX, centerY);
@@ -428,7 +428,7 @@ function addArcSegmentWithMirror(
   }
 
   const padding = parseFloat(strokeWidth) / 2;
-  const svgSize = (r + padding) * 2;
+  const svgSize = r + strokeWidth;
 
   // Create the SVG container
   const svg = document.createElementNS(svgNS, 'svg');
@@ -495,6 +495,8 @@ function addArcSegmentWithMirror(
   );
   svg.appendChild(mirroredArc);
   svg.appendChild(mirroredTextElement);
+  svg.style.border = '1px solid green';
+
   window.svg = svg;
 
   // Append the SVG to the parent container

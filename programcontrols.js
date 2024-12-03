@@ -8,7 +8,6 @@ function elementControlContainer() {
     controlSubContainer.id = controlType;
 
     Object.keys(window.soundControl[controlType]).forEach((option) => {
-      console.log('option=', option);
       const checkboxId = `${controlType}-${option}`;
 
       // Create div and checkbox

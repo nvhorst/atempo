@@ -1,4 +1,4 @@
-* {
+-* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -45,7 +45,7 @@ body {
 
 #interval-buttons-container {
   position: relative;
-  border: 2px dashed pink;
+  /* border: 2px dashed pink; */
   /* background: cyan; */
 }
 
@@ -200,6 +200,9 @@ body {
 .control-container {
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  border: 2px solid orange;
+
   /* gap */
 }
 
@@ -231,21 +234,6 @@ body {
   /* height */
   /* padding */
 }
-
-#elementEcho {
-  background: hsl(204, 100%, 68%);
-}
-
-.echo-label {
-  font-weight: 700;
-  padding: 0;
-  margin: -5px;
-  /* font-size */
-}
-
-/* .radio-container input[type='radio']:checked + label {
-  font-weight: 900;
-} */
 
 .checkbox-interval-style {
   background-color: red;
@@ -296,6 +284,7 @@ body {
   text-anchor: middle;
   dominant-baseline: middle;
   fill: black;
+  font-weight: 700;
   user-select: none; /* Standard */
   -webkit-user-select: none; /* Chrome, Safari, and Edge */
   -moz-user-select: none; /* Firefox */
@@ -393,31 +382,31 @@ td {
 
 #portraitView > tbody > tr:nth-child(1) {
   height: 24vh;
-  background-color: greenyellow;
+  /* background-color: greenyellow; */
   padding: 0;
 }
 
 #portraitView > tbody > tr:nth-child(2) {
   height: 38vh;
-  background-color: yellow;
+  /* background-color: yellow; */
   padding: 0;
 }
 #portraitView > tbody > tr:nth-child(3) {
   height: 38vh;
-  background-color: orange;
+  /* background-color: orange; */
   padding: 0;
 }
 
 #landscapeView > tbody > tr:nth-child(1) > td:nth-child(1) {
-  background-color: pink;
+  /* background-color: pink; */
   height: 33.33vh;
   width: 66%;
 }
 #landscapeView > tbody > tr:nth-child(1) > td:nth-child(2) {
-  background-color: violet;
+  /* background-color: violet; */
 }
 #landscapeView > tbody > tr:nth-child(2) {
-  background-color: green;
+  /* background-color: green; */
   height: 66.67vh;
 }
 
