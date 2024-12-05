@@ -107,7 +107,7 @@
       window.mainRefSize = 2.4;
       window.radiusLarge = 12.5;
       window.radiusSmall = 0.6 * window.radiusLarge;
-      window.strokeWidth = `${2 + window.isPortrait * 0.9}${window.mainUnit}`;
+      window.strokeWidth = `${4}${window.mainUnit}`;
       window.unitToPixel = (1 / 100) * window.innerWidth;
       let intervalButtonSize = 2.5;
       window.elementCSS = [
@@ -377,13 +377,13 @@
       }
 
       drawMainWindow();
-      // Initial update and event listener for resize
       updateViewportSize();
+
       window.addEventListener('resize', () => {
+        updateViewportSize;
         window.unitToPixel = (1 / 100) * window.innerWidth;
         window.isPortrait = window.innerHeight > window.innerWidth;
         drawMainWindow();
-        updateViewportSize;
       });
     </script>
   </body>

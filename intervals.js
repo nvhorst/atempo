@@ -428,7 +428,7 @@ function addArcSegmentWithMirror(
   }
 
   const padding = parseFloat(strokeWidth) / 2;
-  const svgSize = r + strokeWidth;
+  const svgSize = (r + strokeWidth) * 2;
 
   // Create the SVG container
   const svg = document.createElementNS(svgNS, 'svg');

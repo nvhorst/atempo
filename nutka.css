@@ -1,11 +1,15 @@
--* {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  /* border: 4px solid violet; */
+  border: 4px solid violet;
+
+  width: 100%;
+  height: 100%;
+  /* overflow: hidden; */
 }
 
 #all-stats {
@@ -354,8 +358,13 @@ body {
 
 table {
   border-collapse: collapse;
+  max-width: 100%;
   width: 100%;
   height: 100%;
+  table-layout: auto;
+  overflow-x: auto;
+  border-collapse: collapse;
+  border: 10px solid orange;
 }
 
 td {
@@ -378,6 +387,15 @@ td {
 
 .toggle-button:hover {
   background-color: #0056b3;
+}
+
+#LandscapeView {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  table-layout:auto
+  overflow: hidden;
+  border: 4px dashed black;
 }
 
 #portraitView > tbody > tr:nth-child(1) {
