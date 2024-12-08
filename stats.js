@@ -4,10 +4,7 @@ function drawStatChart(intervalStats, baseUnit) {
   );
 
   //USTAW SKALĘ WYKRESU
-  const baseUnit = parseInt(
-    getComputedStyle(document.documentElement).fontSize,
-    10
-  );
+
   const statTopSpacing = baseUnit; // Add spacing above the highest grid line
   const statChartHeight = baseUnit * 25; // Fixed height for the chart
   const statMinGridSpacing = baseUnit * 2; // Minimum spacing between grid lines
