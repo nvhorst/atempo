@@ -75,7 +75,7 @@ window.tones = tones;
 var keys = {};
 window.keys = keys; // Attach keys to the global window object
 
-function piano() {
+function piano(parentHeight, parentWidth) {
   const pianoDiv = document.createElement('div');
   tones.attack = 100;
   const attackColor = 'lawngreen';
@@ -94,20 +94,25 @@ function piano() {
     'd4',
     'e4',
   ];
-  const black_notes = ['c', 'd', 'f', 'g', 'a'];
+  const blackNotes = ['c', 'd', 'f', 'g', 'a'];
   const margin = 0;
-  const white_key_width =
-    (0.5 * window.innerWidth) / (notes.length + margin * 2);
-  const white_key_height = 5 * white_key_width;
-  const black_key_width = 0.6 * white_key_width;
-  const black_key_height = 0.6 * white_key_height;
 
-  pianoDiv.style.height = `${white_key_height}px`;
+  if ((parentHeight / 5) * (notes.length + margin * 2) > parentWidth) {
+    parentHeight = (5 * parentWidth) / (notes.length + margin * 2);
+  }
+
+  const whiteKeyHeight = parentHeight; /// (notes.length + margin * 2);
+  const whiteKeyWidth = whiteKeyHeight / 5;
+
+  const blackKeyWidth = 0.6 * whiteKeyWidth;
+  const blackKeyHeight = 0.6 * whiteKeyHeight;
+
+  pianoDiv.style.height = `${whiteKeyHeight}px`;
 
   const keysContainer = document.createElement('div');
   keysContainer.style.position = 'relative';
-  keysContainer.style.height = `${white_key_height}px`;
-  keysContainer.style.width = `${white_key_width * notes.length}px`;
+  keysContainer.style.height = `${whiteKeyHeight}px`;
+  keysContainer.style.width = `${whiteKeyWidth * notes.length}px`;
   pianoDiv.appendChild(keysContainer);
 
   // Track mouse state and the last key
@@ -131,10 +136,10 @@ function piano() {
 
   for (let i = 0; i < notes.length; i++) {
     const key = makeKey(
-      white_key_width * i,
+      whiteKeyWidth * i,
       0,
-      white_key_width,
-      white_key_height,
+      whiteKeyWidth,
+      whiteKeyHeight,
       'white',
       notes[i]
     );
@@ -143,12 +148,12 @@ function piano() {
   }
 
   notes.forEach((element, count) => {
-    if (count < notes.length - 1 && black_notes.includes(element[0])) {
+    if (count < notes.length - 1 && blackNotes.includes(element[0])) {
       const key = makeKey(
-        white_key_width * (count + 1) - black_key_width * 0.5,
+        whiteKeyWidth * (count + 1) - blackKeyWidth * 0.5,
         0,
-        black_key_width,
-        black_key_height,
+        blackKeyWidth,
+        blackKeyHeight,
         'black',
         element[0] + '#' + element[1]
       );

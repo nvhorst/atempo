@@ -4,7 +4,7 @@ function elementControlContainer() {
 
   Object.keys(window.soundControl).forEach((controlType) => {
     const controlSubContainer = document.createElement('div');
-    controlSubContainer.classList.add('control-container');
+    controlSubContainer.classList.add('control-subContainer');
     controlSubContainer.id = controlType;
 
     Object.keys(window.soundControl[controlType]).forEach((option) => {
@@ -14,7 +14,7 @@ function elementControlContainer() {
       const controlButton = document.createElement('div');
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-      checkbox.classList.add('checkbox');
+      checkbox.classList.add('control-checkbox');
       checkbox.dataset.group = controlType;
       checkbox.dataset.option = option;
       checkbox.checked = window.soundControl[controlType][option] === 1; // Set initial state
@@ -95,40 +95,34 @@ function elementMaxError(init) {
 
   const maxErrorLabel = document.createElement('label');
   maxErrorLabel.textContent = '\u274c';
-  maxErrorLabel.className = 'main-label';
+  maxErrorLabel.className = 'control-subContainer-label';
   container.appendChild(maxErrorLabel);
 
+  // Create the dropdown (select element)
+  const select = document.createElement('select');
+  select.id = 'maxErrorSelect';
+  select.className = 'dropdown-select';
+
+  // Add options to the dropdown
   ['0', '1', '2', '3', '4'].forEach((labelText, i) => {
-    const radioContainer = document.createElement('div');
-    radioContainer.className = 'radio-container';
-
-    const radio = document.createElement('input');
-    radio.type = 'radio';
-    radio.name = 'maxError';
-    radio.value = i;
-    radio.id = `maxError-${i}`;
-    radio.className = 'radio-button';
-
-    if (i === init) radio.checked = true;
-
-    const label = document.createElement('label');
-    label.textContent = labelText;
-    label.setAttribute('for', `maxError-${i}`);
-    label.className = 'radio-label';
-
-    radioContainer.appendChild(radio);
-    radioContainer.appendChild(label);
-    container.appendChild(radioContainer);
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = labelText;
+    if (i === init) option.selected = true; // Pre-select the initial value
+    select.appendChild(option);
   });
 
-  container.querySelectorAll('input[name="maxError"]').forEach((radio) => {
-    radio.addEventListener('change', () => {
-      window.maxError = radio.value;
-      window.refreshCharts();
-    });
+  // Add change event listener to the dropdown
+  select.addEventListener('change', () => {
+    window.maxError = select.value; // Update the global maxError
+    window.refreshCharts(); // Call the refresh function
   });
 
+  container.appendChild(select);
+
+  // Initialize global variable
   window.maxError = init;
+
   return container;
 }
 
@@ -138,13 +132,13 @@ function elementSoundVolume(init) {
 
   // Create label
   const soundVolumeLabel = document.createElement('label');
-  soundVolumeLabel.innerHTML = `<img id="icon-speaker" src="../svg/speaker.svg" alt="Głośność" />`;
-  soundVolumeLabel.className = 'main-label';
+  soundVolumeLabel.innerHTML = `<img id="svg-icon-speaker" src="../svg/speaker.svg" alt="Głośność" />`;
+  soundVolumeLabel.className = 'control-subContainer-label';
   container.appendChild(soundVolumeLabel);
 
   // Create dropdown
   const select = document.createElement('select');
-  select.name = 'soundVolume';
+  select.id = 'soundVolumeSelect';
   select.className = 'dropdown';
 
   // Create options

@@ -6,46 +6,77 @@
 
 body {
   border: 4px solid violet;
-
   width: 100%;
   height: 100%;
   /* overflow: hidden; */
 }
 
-#all-stats {
-  display: flex;
+/* ********* */
+/* KONTENERY */
+/* ********* */
+
+#mainProgram {
+  width:100%;
+  height:100%;
 }
 
-#sterowanie-i-kontrolki {
-  display: flex;
-}
-
-#controlsDiv {
-  display: inline-flex;
-  flex-direction: column;
-  /* column-gap */
-}
-
-#piano {
-  border: 2px solid red;
-  position: relative;
-  width: 100%;
-  height: 60vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+#pianoContainerDiv {
+  height:25%;
+  background:orange;
   overflow: hidden;
 }
 
-#volume-container {
-  margin: 20px;
+#mainContainer {
+  position:relative;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height:30%;
+  background:cyan;
+  overflow: hidden;
+  /* column-gap */
 }
-#volume-slider {
-  width: 300px;
+
+#statsContainer {
+  display:flex;
+  justify-content: space-around;
+  height:45%;
+  background-color: green;
+  overflow: hidden;
 }
-#volume-label {
-  margin-left: 10px;
+
+@media (min-aspect-ratio : 1.3) {
+  #pianoContainerDiv {
+  width:60%;
+  height:40%;
+  }
+  #mainContainer {
+    width:60%;
+    height:60%;
+  }
+  #statsContainer {
+    position:absolute;
+    top:0;
+    left:60%;
+    width:40%;
+height:100%;
+  }
 }
+
+/* ************ */
+/* PODKONTENERY */
+/* ************ */
+
+#controlsDiv {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  /* column-gap */
+}
+
+/* ********************************* */
+/* KONTENER Z PRZYCISKAMI INTERWAŁÓw */
+/* ********************************* */
 
 #interval-buttons-container {
   position: relative;
@@ -59,30 +90,34 @@ body {
   border-width: 0.5px;
   background-color: #fff4cd;
   position: absolute;
+  user-select: none;
   /* height */
   /* width */
   /* font-size */
 }
 
-.interval_button:hover {
+.interval-button:hover {
   background-color: blue;
   color: #fff4cd;
 }
 
-.interval_button:disabled {
+.interval-button:disabled {
   background-color: white;
   color: #777777;
   border: 1px dashed lightgray;
   cursor: not-allowed;
 }
 
+/* ******************** */
 /* STATYSTYKI I WYKRESY */
-#stats {
+/* ******************** */
+
+#000stats {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* width: 90vw; */
-  /* height: 90vh; */
+  /* width */
+  /* height */
 }
 
 #stat-chart-container {
@@ -145,14 +180,22 @@ body {
   justify-items: left;
 }
 
-.stat-bar {
-  width: 1.2vw;
-}
-
 .stat-interval-area {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  
+}
+
+.stat-interval-label {
+  text-align: center;
+  color: black;
+  width: 100%;
+  /* font-size: 1rem; */
+}
+
+.stat-bar {
+  width: 1.2vw;
 }
 
 .stat-good-bar {
@@ -167,110 +210,51 @@ body {
   background-color: red;
 }
 
-.stat-interval-label {
-  text-align: center;
-  color: black;
+/* *************** */
+/* GŁÓWNY PRZYCISK */
+/* *************** */
+
+#mainButton {
+  position: relative;
+  cursor: pointer;
+  /* height */
+  /* width */
+}
+
+#mainButton-circle {
+  position: relative;
   width: 100%;
-  /* font-size: 1rem; */
+  height: 100%;
+  background-color: #007bff;
+  border-radius: 50%;
+  border: 0px solid red;
+  transition: background-color 1s;
 }
 
-/* ELEMENTY KONTROLNE */
-
-#elementOrderSelect,
-#elementSoundLength,
-#elementSoundDelay,
-#elementMaxError,
-#elementSoundVolume {
-  display: flex;
-  flex-direction: column;
-  /* border: 3px dashed blue; */
-}
-
-#elementControlContainer {
-  display: flex;
-  flex-direction: row;
-  /* gap */
-}
-
-.control-button {
-  display: flex;
-  border-radius: 25%;
-  background: greenyellow;
-  flex-direction: row;
-  cursor: pointer;
-  align-items: center;
-}
-
-.control-container {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border: 2px solid orange;
-
-  /* gap */
-}
-
-.control-button-label {
-  /* margin: 0 0 auto; */
-
-  /* display: inline-block; */
-  /* font-size */
-}
-
-/* LABEL STYLES */
-.main-label {
-  font-weight: 700;
-  margin: 0 0 auto;
-  display: inline-block;
-  /* font-size */
-}
-
-/* Radio Button Container */
-.radio-container,
-#elementEcho {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  border-radius: 25%;
-  background: greenyellow;
-  flex-direction: row;
-  /* width */
-  /* height */
-  /* padding */
-}
-
-.checkbox-interval-style {
-  background-color: red;
-  margin: auto;
-  display: inline-block;
+#mainButton-triangle {
   position: absolute;
-  /* width */
-  /* height */
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-top: solid transparent;
+  border-bottom: solid transparent;
+  border-left: solid white;
+  /* border-top-width: 40px; */
+  /* border-bottom-width: 40px; */
+  /* border-left-width: 70px; */
 }
 
-/* Radio Buttons */
-.radio-button {
-  transform: scale(1.5);
-  cursor: pointer;
-}
-
-/* Checkbox Styles */
-.checkbox {
-  cursor: pointer;
-  transform: scale(1.5);
-}
-
-.control-button-note-icon {
-  /* height */
-}
-
-#ring {
-  pointer-events: none;
-}
-
-.inner-spacing {
+#mainButton-square {
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
   background-color: white;
-  pointer-events: none;
+  display: none;
 }
 
 #btn_Repeat:hover,
@@ -296,6 +280,127 @@ body {
   /* font-size */
 }
 
+.interval-checkbox {
+  cursor:pointer;
+  margin: auto;
+  display: inline-block;
+  position: absolute;
+  /* width */
+  /* height */
+}
+
+
+/* ****************** */
+/* ELEMENTY STERUJĄCE */
+/* ****************** */
+
+#elementMaxError
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position:absolute;
+  top:0;
+  right:0;
+  /* border: 3px dashed blue; */
+}
+
+#elementSoundVolume {
+  display:flex;
+  flex-direction:column;
+  position:absolute;
+  align-items: center;
+  bottom:0;
+  right:0;
+}
+
+#maxErrorSelect, #soundVolumeSelect {
+  cursor:pointer;
+  /* font-size */
+}
+
+
+/* kontener dla kontenerów kierunku, długości i przerw */
+#elementControlContainer {
+  display: flex;
+  flex-direction: row;
+  /* gap */
+}
+
+/* podkontener dla wyborów */
+.control-subContainer {
+  display: flex;
+  flex-direction: column;
+  /* padding: 10px; */
+  /* gap */
+}
+
+/* opis tam gdzie trzeba */
+.control-subContainer-label {
+  margin: 0 0 auto;
+  user-select: none;
+  /* display: block; */
+  /* font-size */
+}
+
+/* Checkbox Styles dla kontrolek */
+.control-checkbox {
+  cursor: pointer;
+  flex-shrink: 0;
+  /* width */
+  /* height */
+}
+
+/* przycisk sterowania (typ, długość, przerwa) */
+.control-button {
+  display: flex;
+  border-radius: 25%;
+  background: greenyellow;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+}
+
+/* opis przycisku */
+.control-button-label {
+  user-select:none;
+  cursor:pointer;
+  /* margin-left */
+  /* font-size */
+}
+
+/* ikonki dla nutek */
+.control-button-note-icon {
+  /* margin-left */
+  /* height */
+}
+
+/* Radio Buttons */
+.radio-button {
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+/* Radio Button Container */
+.radio-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  border-radius: 25%;
+  background: greenyellow;
+  flex-direction: row;
+  /* width */
+  /* height */
+  /* padding */
+}
+
+#svg-icon-speaker {
+  width: 3rem;
+  height: 3rem;
+}
+
+
+/* PRZYCISK RESETOWANIA STATYSTYK */
 #reset-btn {
   /* font-size */
   background-color: red;
@@ -303,90 +408,6 @@ body {
   padding: 10px;
   margin: 10px;
   border-radius: 10%;
-}
-
-#icon-speaker {
-  width: 3rem;
-  height: 2rem;
-  color: blue;
-}
-
-/* MAIN PLAY INTERVAL BUTTON */
-
-#mainButton {
-  position: relative;
-  cursor: pointer;
-  /* height */
-  /* width */
-}
-
-#circle {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: #007bff;
-  border-radius: 50%;
-  border: 0px solid red;
-  transition: background-color 1s;
-}
-
-#triangle {
-  position: absolute;
-  top: 50%;
-  left: 55%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  border-top: solid transparent;
-  border-bottom: solid transparent;
-  border-left: solid white;
-  /* border-top-width: 40px; */
-  /* border-bottom-width: 40px; */
-  /* border-left-width: 70px; */
-}
-
-#square {
-  position: absolute;
-  top: 50%;
-  left: 55%;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 10px;
-  background-color: white;
-  display: none;
-}
-
-table {
-  border-collapse: collapse;
-  max-width: 100%;
-  width: 100%;
-  height: 100%;
-  table-layout: auto;
-  overflow-x: auto;
-  border-collapse: collapse;
-  border: 10px solid orange;
-}
-
-td {
-  border: 1px solid black;
-  text-align: center;
-  vertical-align: middle;
-  padding: 20px;
-  /* display: flex; */
-}
-
-.toggle-button {
-  margin: 10px;
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.toggle-button:hover {
-  background-color: #0056b3;
 }
 
 #LandscapeView {
@@ -426,25 +447,4 @@ td {
 #landscapeView > tbody > tr:nth-child(2) {
   /* background-color: green; */
   height: 66.67vh;
-}
-
-#mainContainer,
-#statContainer {
-  /* width:60%; */
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: baseline;
-  position: relative;
-  /* margin:0; */
-  /* padding:0; */
-}
-#mainDiv,
-#statsDiv,
-#controlsDiv {
-  display: flex;
-  flex-direction: row;
-  /* background:red; */
-  margin: 0 0 auto;
-  position: relative;
 }

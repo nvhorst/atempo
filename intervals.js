@@ -79,17 +79,17 @@ function createMainPlayIntervalButton() {
 
   // Create the circle
   const circle = document.createElement('div');
-  circle.id = 'circle';
+  circle.id = 'mainButton-circle';
   mainExcerciseButton.appendChild(circle);
 
   // Create the triangle
   const triangle = document.createElement('div');
-  triangle.id = 'triangle';
+  triangle.id = 'mainButton-triangle';
   circle.appendChild(triangle);
 
   // Create the square
   const square = document.createElement('div');
-  square.id = 'square';
+  square.id = 'mainButton-square';
   circle.appendChild(square);
 
   let blinkInterval;
@@ -262,7 +262,7 @@ function createIntervalButton(index, label) {
   // Create the checkbox
   const intervalCheckbox = document.createElement('input');
   intervalCheckbox.type = 'checkbox';
-  intervalCheckbox.classList.add('checkbox-interval-style');
+  intervalCheckbox.classList.add('interval-checkbox');
   intervalCheckbox.id = `intervalCheckbox-${index}`;
   intervalCheckbox.checked = 'true';
   intervalCheckbox.addEventListener('change', (event) => {
@@ -329,12 +329,8 @@ const arrangeButtonsInDoubleClock = (container, radius1, radius2) => {
         element.offsetHeight ||
         parseInt(window.getComputedStyle(element).height, 10);
 
-      element.style.left = `${(x - elementWidth) / 2 / window.unitToPixel}${
-        window.mainUnit
-      }`;
-      element.style.top = `${(y - elementHeight) / 2 / window.unitToPixel}${
-        window.mainUnit
-      }`;
+      element.style.left = `${(x - elementWidth) / 2}px`;
+      element.style.top = `${(y - elementHeight) / 2}px`;
     });
   };
 
@@ -428,13 +424,13 @@ function addArcSegmentWithMirror(
   }
 
   const padding = parseFloat(strokeWidth) / 2;
-  const svgSize = (r + strokeWidth) * 2;
+
+  const svgSize = (r + padding) * 2;
 
   // Create the SVG container
   const svg = document.createElementNS(svgNS, 'svg');
   svg.setAttribute('width', svgSize);
   svg.setAttribute('height', svgSize);
-  svg.setAttribute('viewBox', `0 0 ${svgSize} ${svgSize}`);
 
   // Use `transform: translate` to center the SVG
   svg.style.position = 'absolute';
@@ -447,8 +443,8 @@ function addArcSegmentWithMirror(
   // Calculate SVG size and offsets for centering
 
   // Center the SVG viewBox
-  const viewBoxX = cx - r - padding;
-  const viewBoxY = cy - r - padding;
+  const viewBoxX = cx - r - padding; //- padding;
+  const viewBoxY = cy - r - padding; //- padding;
   const viewBoxSize = svgSize;
 
   // Create the SVG container
@@ -495,7 +491,6 @@ function addArcSegmentWithMirror(
   );
   svg.appendChild(mirroredArc);
   svg.appendChild(mirroredTextElement);
-  svg.style.border = '1px solid green';
 
   window.svg = svg;
 

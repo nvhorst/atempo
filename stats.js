@@ -1,16 +1,16 @@
-function drawStatChart(intervalStats, showBad2) {
+function drawStatChart(intervalStats, baseUnit) {
   const maxValue = Math.max(
     ...intervalStats.map((stat) => Math.max(stat.good, stat.bad1, stat.bad2))
   );
 
   //USTAW SKALĘ WYKRESU
-  const remSize = parseInt(
+  const baseUnit = parseInt(
     getComputedStyle(document.documentElement).fontSize,
     10
   );
-  const statTopSpacing = remSize; // Add spacing above the highest grid line
-  const statChartHeight = remSize * 25; // Fixed height for the chart
-  const statMinGridSpacing = remSize * 2; // Minimum spacing between grid lines
+  const statTopSpacing = baseUnit; // Add spacing above the highest grid line
+  const statChartHeight = baseUnit * 25; // Fixed height for the chart
+  const statMinGridSpacing = baseUnit * 2; // Minimum spacing between grid lines
   const statGridLineSpacing = (statChartHeight - statTopSpacing) / maxValue;
 
   //USTAW CO ILE POWINNA BYĆ JEDNOSTKA
@@ -40,7 +40,7 @@ function drawStatChart(intervalStats, showBad2) {
     statGridLine.classList.add('stat-grid-line');
 
     const statGridPosition =
-      ((statChartHeight - remSize * 2 - statTopSpacing) / maxValue) *
+      ((statChartHeight - baseUnit * 2 - statTopSpacing) / maxValue) *
       statGridValue;
     statGridLine.style.bottom = `${statGridPosition}px`;
     statGridContainer.appendChild(statGridLine);
@@ -64,7 +64,7 @@ function drawStatChart(intervalStats, showBad2) {
 
     const scaleFactor =
       maxValue > 0
-        ? (statChartHeight - 2 * remSize - statTopSpacing) / maxValue
+        ? (statChartHeight - 2 * baseUnit - statTopSpacing) / maxValue
         : 0;
     const goodHeight = stat.good * scaleFactor;
     const bad1Height = stat.bad1 * scaleFactor;
