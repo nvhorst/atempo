@@ -173,7 +173,7 @@ function piano(parentHeight, parentWidth) {
     key.style.transition = 'background-color 0.5s ease';
     key.note = note;
 
-    key.addEventListener('mousedown', function (event) {
+    key.addEventListener('click', function (event) {
       tones.play(event.target.note);
       key.style.backgroundColor = attackColor;
       setTimeout(() => {
