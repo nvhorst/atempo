@@ -4,7 +4,6 @@ function drawStatChart(intervalStats, maxX, maxY) {
   );
   //USTAW SKALĘ WYKRESU
   let baseUnit = maxY / 27;
-  console.log('maxX=', maxX);
   // console.log('baseUnit=', baseUnit);
   // console.log('maxX=', maxX);
   // console.log('maxY=', maxY);

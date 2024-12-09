@@ -22,6 +22,7 @@
       content="Naucz się rozpoznawać interwały. Learn to recognize intervals."
     />
     <meta property="og:url" content="https://atempo.pl" />
+    <meta name="theme-color" content="#000000">
     <title>ATempo</title>
     <link rel="stylesheet" href="nutka.css" />
   </head>
@@ -126,8 +127,6 @@
         })
       );
 
-      // LAYOUT CALCULATIONS
-
       window.mainRefSize = 2.5;
       window.isPortrait = window.innerHeight > window.innerWidth;
       window.intervalButtonSize = 2.5;
@@ -153,8 +152,8 @@
 
       function drawMainWindow() {
         // WYMIARY
-        document.documentElement.style.height = document.body.clientHeight;
-        document.documentElement.style.width = window.width;
+        // document.documentElement.style.height = document.body.clientHeight;
+        // document.documentElement.style.width = window.width;
 
         // UCHWYTY KONTENERÓW
         const pianoContainer = document.getElementById('pianoContainer');
@@ -190,7 +189,7 @@
         const infoDivContainer = document.createElement('div');
         infoDivContainer.id = 'infoDiv';
         infoDiv.innerHTML =
-          '<p>&copy 2024</p><p> Nikodem Horst</p><p><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND</a></p><p><small>nvhorst@gmail.com</small></p><p><a href="https://github.com/nvhorst/atempo">GitHub</a></p>';
+          '<p>&copy 2024 v0.1</p><p> Nikodem Horst</p><p><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND</a></p><p><small>nvhorst@gmail.com</small></p><p><a href="https://github.com/nvhorst/atempo">GitHub</a></p>';
 
         //STATYSTYKI
         const statsChart = drawStatChart(
