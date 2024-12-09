@@ -2,10 +2,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 body {
-  border: 4px solid violet;
   width: 100%;
   height: 100%;
   /* overflow: hidden; */
@@ -16,76 +16,90 @@ body {
 /* ********* */
 
 #mainProgram {
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 }
 
-#pianoContainerDiv {
-  height:25%;
-  margin: 0 0 auto;
-  /* background:orange; */
+#pianoContainer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 25%;
   overflow: hidden;
 }
 
+#infoDiv {
+  padding: 5px;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  font-weight: 700;
+}
+
 #mainContainer {
-  position:relative;
-  display:flex;
+  position: relative;
+  display: flex;
   justify-content: center;
   align-items: center;
-  height:40%;
-  /* background:cyan; */
+  height: 40%;
   overflow: hidden;
   /* column-gap */
 }
 
 #statsContainer {
-  display:flex;
+  display: flex;
   justify-content: space-around;
-  height:35%;
-  /* background-color: green; */
+  height: 35%;
   /* overflow: hidden; */
 }
 
 #numStatsDiv {
-  width:20%;
-  height:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 20%;
+  height: 100%;
   align-content: center;
-  margin:1rem;
+  padding: 1rem;
 }
 
 #chartStatsDiv {
-  width:80%;
+  width: 80%;
   height: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-@media (min-aspect-ratio : 1.3) {
-  #pianoContainerDiv {
-  width:60%;
-  height:40%;
+@media (min-aspect-ratio: 1.3) and (orientation: landscape) {
+  #pianoContainer {
+    width: 60%;
+    height: 40%;
   }
+
   #mainContainer {
-    width:60%;
-    height:60%;
+    width: 60%;
+    height: 60%;
   }
   #statsContainer {
-    position:absolute;
+    position: absolute;
     flex-direction: column;
-    top:0;
-    left:60%;
-    width:40%;
-    height:100%;
+    top: 0;
+    left: 60%;
+    width: 40%;
+    height: 100%;
   }
 
   #numStatsDiv {
-    position:relative;
-    top 5%;left:5%;
-    width:100%;
-    height:30%;
+    position: relative;
+    width: 100%;
+    height: 30%;
   }
 
   #chartStatsDiv {
-    width:100%;
-    height:70%;
+    width: 100%;
+    height: 70%;
+    left: 10px;
   }
 }
 
@@ -95,19 +109,17 @@ body {
 
 #controlsDiv {
   display: inline-flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  /* column-gap */
+  /* gap */
 }
 
 /* ********************************* */
-/* KONTENER Z PRZYCISKAMI INTERWAŁÓw */
+/* KONTENER Z PRZYCISKAMI INTERWAŁÓW */
 /* ********************************* */
 
 #interval-buttons-container {
   position: relative;
-  /* border: 2px dashed pink; */
-  /* background: cyan; */
 }
 
 .interval-button {
@@ -139,15 +151,10 @@ body {
 /* ******************** */
 
 #stat-chart-container {
-  height: 100%;
-  /* width: 100%; */
-  overflow: hidden;
-  margin: 5%; /* Add spacing above the chart */
-  padding: 1rem 0px 0px 1.5rem;
-  /* border: 2px solid blue; */
+  /* overflow: hidden; */
+  margin: 5%;
   display: flex;
-  flex-direction: COLUMN;
-  /* row-gap: 10px; */
+  flex-direction: column;
   justify-content: space-evenly; /* Distribute groups evenly */
   align-items: flex-end; /* Align groups at the bottom */
   position: relative;
@@ -161,7 +168,6 @@ body {
   justify-content: space-around;
   align-items: flex-end;
   /* column-gap: 10px; */
-  /* border: 3px dashed orange; */
   box-sizing: border-box;
 }
 
@@ -170,8 +176,8 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
+  font-size: 13px;
   /* column-gap: 10px; */
-  /* border: 3px dashed cyan; */
   box-sizing: border-box;
 }
 
@@ -187,7 +193,7 @@ body {
   position: absolute;
   left: -1.5rem;
   font-size: 1rem;
-  color: #666;
+  color: black;
   transform: translateY(+50%);
 }
 
@@ -196,14 +202,12 @@ body {
   flex-direction: column;
   align-items: flex-end;
   justify-items: left;
-  /* border:1px solid red; */
 }
 
 .stat-interval-area {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  /* border: 2px dashed green; */
 }
 
 .stat-interval-label {
@@ -212,7 +216,6 @@ body {
   color: black;
   width: 100%;
   font-size: 13px;
-  /* border: 2px solid pink */
 }
 
 .stat-bar {
@@ -232,7 +235,7 @@ body {
 }
 
 span {
-  display:block;
+  display: block;
   /* font-size */
 }
 
@@ -309,7 +312,7 @@ span {
 }
 
 .interval-checkbox {
-  cursor:pointer;
+  cursor: pointer;
   margin: auto;
   display: inline-block;
   position: absolute;
@@ -317,36 +320,30 @@ span {
   /* height */
 }
 
-
 /* ****************** */
 /* ELEMENTY STERUJĄCE */
 /* ****************** */
 
-#elementMaxError
-{
+#elementMaxError {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  position:absolute;
-  top:0;
-  right:0;
-  /* border: 3px dashed blue; */
+  /* position:absolute; */
+  top: 0;
+  right: 0;
 }
 
 #elementSoundVolume {
-  display:flex;
-  flex-direction:column;
-  position:absolute;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  bottom:0;
-  right:0;
 }
 
-#maxErrorSelect, #soundVolumeSelect {
-  cursor:pointer;
+#maxErrorSelect,
+#soundVolumeSelect {
+  cursor: pointer;
   /* font-size */
 }
-
 
 /* kontener dla kontenerów kierunku, długości i przerw */
 #elementControlContainer {
@@ -391,8 +388,8 @@ span {
 
 /* opis przycisku */
 .control-button-label {
-  user-select:none;
-  cursor:pointer;
+  user-select: none;
+  cursor: pointer;
   /* margin-left */
   /* font-size */
 }
@@ -427,52 +424,16 @@ span {
   height: 3rem;
 }
 
-
 /* PRZYCISK RESETOWANIA STATYSTYK */
 #reset-btn {
   /* font-size */
   background-color: red;
+  cursor: pointer;
   color: white;
+  position: absolute;
+  bottom: 0;
+  right: 0;
   padding: 10px;
   margin: 10px;
-  border-radius: 10%;
-}
-
-#LandscapeView {
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  table-layout:auto
-  overflow: hidden;
-  border: 4px dashed black;
-}
-
-#portraitView > tbody > tr:nth-child(1) {
-  height: 24vh;
-  /* background-color: greenyellow; */
-  padding: 0;
-}
-
-#portraitView > tbody > tr:nth-child(2) {
-  height: 38vh;
-  /* background-color: yellow; */
-  padding: 0;
-}
-#portraitView > tbody > tr:nth-child(3) {
-  height: 38vh;
-  /* background-color: orange; */
-  padding: 0;
-}
-
-#landscapeView > tbody > tr:nth-child(1) > td:nth-child(1) {
-  /* background-color: pink; */
-  height: 33.33vh;
-  width: 66%;
-}
-#landscapeView > tbody > tr:nth-child(1) > td:nth-child(2) {
-  /* background-color: violet; */
-}
-#landscapeView > tbody > tr:nth-child(2) {
-  /* background-color: green; */
-  height: 66.67vh;
+  border-radius: 100%;
 }

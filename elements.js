@@ -19,15 +19,54 @@ function updateCSSRulesFromArray(elementSizes) {
 function getElementCSS() {
   window.unitToPixel = !isPortrait ? window.innerHeight : window.innerWidth;
   window.unitToPixel /= 100;
+  window.optimumWheelDiameter =
+    document.getElementById('mainContainer').offsetHeight * 0.9;
+  //skoryguj wielkość optimumWheelDiameter
+  const mainDivWidth = document
+    .getElementById('mainContainer')
+    .getBoundingClientRect().width;
+  let controlsDivWidth = document.getElementById('controlsDiv');
+  controlsDivWidth =
+    mainRefSize * intervalButtonSize * window.unitToPixel * 3 +
+    mainRefSize * 2 * window.unitToPixel;
+
+  const controlsDivColumnGap =
+    window.mainRefSize * window.intervalButtonSize * window.unitToPixel;
+  if (
+    controlsDivWidth + window.optimumWheelDiameter + controlsDivColumnGap * 3 >
+    mainDivWidth
+  ) {
+    optimumWheelDiameter =
+      mainDivWidth - controlsDivWidth - 3 * controlsDivColumnGap;
+  }
+
+  window.intervalButtonSize =
+    window.optimumWheelDiameter / window.unitToPixel / window.mainRefSize / 6;
+  window.radiusLarge = 5 * window.intervalButtonSize;
+  window.radiusSmall = 0.6 * window.radiusLarge;
   window.strokeWidth = `${4 * window.unitToPixel}px`;
+
+  window.intervalButtonsContainer.style.width = `${
+    mainRefSize *
+    window.unitToPixel *
+    (window.radiusLarge + window.intervalButtonSize)
+    // (6 * window.intervalButtonSize)
+  }px`;
+
+  intervalButtonsContainer.style.height = intervalButtonsContainer.style.width;
+
   return [
+    ['#mainContainer', 'column-gap', `${controlsDivColumnGap}px`],
     [
-      '#mainContainer',
-      'column-gap',
-      `${mainRefSize * 2 * window.unitToPixel}px`,
-    ],
-    ['#mainButton', 'width', `${mainRefSize * 5 * window.unitToPixel}px`], //1.5
-    ['#mainButton', 'height', `${mainRefSize * 5 * window.unitToPixel}px`], //1.5
+      '#mainButton',
+      'width',
+      `${mainRefSize * window.intervalButtonSize * 2 * window.unitToPixel}px`,
+    ], //1.5
+    [
+      '#mainButton',
+      'height',
+      `${mainRefSize * window.intervalButtonSize * 2 * window.unitToPixel}px`,
+    ], //1.5
     [
       '#mainButton-triangle',
       'border-top-width',
@@ -74,29 +113,31 @@ function getElementCSS() {
     [
       '.interval-button',
       'font-size',
-      `${mainRefSize * 1 * window.unitToPixel}px`,
+      `${
+        ((mainRefSize * window.intervalButtonSize) / 2.5) * window.unitToPixel
+      }px`,
     ], //1.5
     [
       '.interval-checkbox',
       'width',
-      `${mainRefSize * 1 * window.unitToPixel}px`,
+      `${
+        ((mainRefSize * window.intervalButtonSize) / 2.5) * window.unitToPixel
+      }px`,
     ],
     [
       '.interval-checkbox',
       'height',
-      `${mainRefSize * 1 * window.unitToPixel}px`,
+      `${
+        ((mainRefSize * window.intervalButtonSize) / 2.5) * window.unitToPixel
+      }px`,
     ],
-
+    ['#controlsDiv', 'gap', `${mainRefSize * 0.75 * window.unitToPixel}px`],
     [
       '#elementControlContainer',
       'column-gap',
-      `${mainRefSize * 1 * window.unitToPixel}px`,
+      `${mainRefSize * 2 * window.unitToPixel}px`,
     ], //2
-    [
-      '#controlsDiv',
-      'column-gap',
-      `${mainRefSize * 0.0 * window.unitToPixel}px`,
-    ], //2
+    ['#controlsDiv', 'column-gap', `${mainRefSize * 1 * window.unitToPixel}px`], //2
     [
       '.control-subContainer',
       'gap',
@@ -145,7 +186,7 @@ function getElementCSS() {
     [
       '#maxErrorSelect, #soundVolumeSelect',
       'font-size',
-      `${mainRefSize * 1 * window.unitToPixel}px`,
+      `${((mainRefSize * intervalButtonSize) / 2.5) * window.unitToPixel}px`,
     ],
 
     [
@@ -155,5 +196,6 @@ function getElementCSS() {
     ], //1
     ['span', 'font-size', `${mainRefSize * 1 * window.unitToPixel}px`], //1
     ['#reset-btn', 'font-size', `${mainRefSize * 2 * window.unitToPixel}px`], //2
+    ['#stat-label-container', 'font-size', `13px`], //2
   ];
 }

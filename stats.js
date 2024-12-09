@@ -1,13 +1,13 @@
-function drawStatChart(intervalStats, fontSize, maxX, maxY) {
+function drawStatChart(intervalStats, maxX, maxY) {
   const maxValue = Math.max(
     ...intervalStats.map((stat) => Math.max(stat.good, stat.bad1, stat.bad2))
   );
-
   //USTAW SKALĘ WYKRESU
   let baseUnit = maxY / 27;
-  console.log('baseUnit=', baseUnit);
   console.log('maxX=', maxX);
-  console.log('maxY=', maxY);
+  // console.log('baseUnit=', baseUnit);
+  // console.log('maxX=', maxX);
+  // console.log('maxY=', maxY);
   const statTopSpacing = baseUnit; // Add spacing above the highest grid line
   const statChartHeight = baseUnit * 25; // Fixed height for the chart
   const statMinGridSpacing = baseUnit * 2; // Minimum spacing between grid lines
@@ -23,7 +23,7 @@ function drawStatChart(intervalStats, fontSize, maxX, maxY) {
   const statChartContainer = document.createElement('div');
   statChartContainer.id = 'stat-chart-container';
   statChartContainer.style.width = maxX;
-  statChartContainer.style.height = maxY;
+  // statChartContainer.style.height = maxY * 0.9;
 
   const statGridContainer = document.createElement('div');
   statGridContainer.id = 'stat-grid-container';
@@ -33,6 +33,13 @@ function drawStatChart(intervalStats, fontSize, maxX, maxY) {
 
   statChartContainer.appendChild(statGridContainer);
   statChartContainer.appendChild(statLabelContainer);
+
+  const isGlobalEmpty = window.globalIntervalStats.every(
+    (item) => item.good === 0 && item.bad1 === 0 && item.bad2 === 0
+  );
+  if (isGlobalEmpty) {
+    return statChartContainer;
+  }
 
   for (let i = 0; i <= statNumGridLines; i++) {
     if (i * skipFactor > maxValue) continue;
@@ -108,22 +115,24 @@ function drawNumericStatContainer() {
   const totalRight = document.createElement('span');
   const totalWrong = document.createElement('span');
   const totalCount = document.createElement('span');
+  const insertBrake = document.createElement('span');
   const totalPercentRight = document.createElement('span');
   const totalIncorrectGuess = document.createElement('span');
-  const mostRight = document.createElement('span');
-  const mostWrong = document.createElement('span');
-  const mostMistaken = document.createElement('span');
+  // const mostRight = document.createElement('span');
+  // const mostWrong = document.createElement('span');
+  // const mostMistaken = document.createElement('span');
 
   // Set the font size and display style for all spans
   [
     totalRight,
     totalWrong,
     totalCount,
+    insertBrake,
     totalPercentRight,
     totalIncorrectGuess,
-    mostRight,
-    mostWrong,
-    mostMistaken,
+    // mostRight,
+    // mostWrong,
+    // mostMistaken,
   ].forEach((span) => {
     numericStatContainer.appendChild(span);
   });
@@ -132,19 +141,20 @@ function drawNumericStatContainer() {
     (sum, stat) => sum + stat.good,
     0
   );
+
   const totalBad2 =
     window.globalIntervalStats.reduce((sum, stat) => sum + stat.bad2, 0) +
     window.errorIntervalCounter; //te o których jeszcze nie wie użytkownik;
 
-  totalRight.innerHTML = `Dobre: ${totalGood} (${
+  totalRight.innerHTML = `\u{2B50} ${totalGood} (${
     totalBad2 + totalGood > 0
       ? (100 * (totalGood / (totalBad2 + totalGood))).toFixed(0)
       : '---'
   }%)`;
-  totalWrong.innerHTML = `Złe: ${totalBad2}`;
-  totalCount.innerHTML = `Razem: ${totalGood + totalBad2}`;
-
-  totalIncorrectGuess.innerHTML = `Błędy: ${
+  totalWrong.innerHTML = `\u{1F494} ${totalBad2}`;
+  totalCount.innerHTML = `\u{2B50}+\u{1F494} ${totalGood + totalBad2}`;
+  insertBrake.innerHTML = '&nbsp';
+  totalIncorrectGuess.innerHTML = `\u{274C} ${
     window.errorIntervalCounter > window.maxError
       ? '*'
       : window.errorIntervalCounter
@@ -163,10 +173,9 @@ function drawNumericStatContainer() {
       : window.buttonLabels[maxFieldIndex];
   }
 
-  // Example usage
-  mostRight.innerHTML = getIntervalForHighest('good');
-  mostWrong.innerHTML = getIntervalForHighest('bad2');
-  mostMistaken.innerHTML = getIntervalForHighest('bad1');
+  // mostRight.innerHTML = getIntervalForHighest('good');
+  // mostWrong.innerHTML = getIntervalForHighest('bad2');
+  // mostMistaken.innerHTML = getIntervalForHighest('bad1');
 
   return numericStatContainer;
 }
@@ -184,6 +193,7 @@ function resetIntervalStats() {
   const numericStatsContainer = document.getElementById('numStatsDiv');
   numericStatsContainer.innerHTML = ''; // Clear the current chart
   numericStatsContainer.appendChild(drawNumericStatContainer());
+  numericStatsContainer.appendChild(window.resetButton);
 
   const chartStatsContainer = document.getElementById('chartStatsDiv');
   chartStatsContainer.innerHTML = ''; // Clear the current chart

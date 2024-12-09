@@ -27,13 +27,13 @@ function refreshCharts() {
   const numericStatsContainer = document.getElementById('numStatsDiv');
   numericStatsContainer.innerHTML = ''; // Clear the current chart
   numericStatsContainer.appendChild(drawNumericStatContainer());
+  numericStatsContainer.appendChild(window.resetButton);
   const chartStatsDiv = document.getElementById('chartStatsDiv');
   chartStatsDiv.innerHTML = ''; // Clear the current chart
   chartStatsDiv.appendChild(
     drawStatChart(
       window.globalIntervalStats,
-      13,
-      chartStatsDiv.offsetWidth * 0.9,
+      chartStatsDiv.offsetWidth * 0.8,
       chartStatsDiv.offsetHeight * 0.9
     )
   );
@@ -101,7 +101,7 @@ function pickRandomInterval(rangeMin, rangeMax, max, given = -1) {
 function PlayInterval(note1, note2) {
   const firstNote = notes[note1];
   const secondNote = notes[note2];
-  tones.volume = 20 / 100; //
+  tones.volume = window.soundVolume / 100; //
   tones.release = window.soundLength * 400;
   tones.sustain = 0;
   if (window.soundOrder === 'both') {
@@ -159,6 +159,8 @@ function createMainPlayIntervalButton() {
       window.svg.style.display = 'none';
       updateCheckedIntervals(true);
       enableElementCSS(document.getElementById('elementMaxError'));
+      window.errorIntervalCounter = 0;
+      refreshCharts();
     } else {
       // Start blinking and show the square
       startBlinking();

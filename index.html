@@ -6,7 +6,11 @@
   </head>
   <body>
     <div class="mainProgram">
-      <div id="pianoContainerDiv"></div>
+      <div id="pianoContainer">
+        <div id="soundDiv"></div>
+        <div id="pianoDiv"></div>
+        <div id="infoDiv"></div>
+      </div>
       <div id="mainContainer">
         <div id="controlsDiv"></div>
         <div id="mainDiv"></div>
@@ -98,12 +102,18 @@
       );
 
       // LAYOUT CALCULATIONS
+
+      window.mainRefSize = 2.5;
       window.isPortrait = window.innerHeight > window.innerWidth;
-      window.mainRefSize = 2.4;
-      window.radiusLarge = 12.5;
+      window.intervalButtonSize = 2.5;
+      window.radiusLarge = 5 * window.intervalButtonSize;
       window.radiusSmall = 0.6 * window.radiusLarge;
 
-      let intervalButtonSize = 2.5;
+      const resetButton = document.createElement('button');
+      resetButton.innerHTML = '&nbsp0&nbsp';
+      resetButton.id = 'reset-btn';
+      resetButton.addEventListener('click', resetIntervalStats);
+      window.resetButton = resetButton;
 
       function updateCheckedIntervals(visibility) {
         for (let i = 0; i < 13; i++) {
@@ -122,7 +132,10 @@
         document.documentElement.style.width = window.width;
 
         // UCHWYTY KONTENERÓW
-        const divPiano = document.getElementById('pianoContainerDiv');
+        const pianoContainer = document.getElementById('pianoContainer');
+        const divPiano = document.getElementById('pianoDiv');
+        const divSound = document.getElementById('soundDiv');
+        const divInfo = document.getElementById('infoDiv');
         const divMain = document.getElementById('mainDiv');
         const divControls = document.getElementById('controlsDiv');
         const divChartStats = document.getElementById('chartStatsDiv');
@@ -142,19 +155,21 @@
         // Add No Error Select
         if (!mainContainer.querySelector('#elementMaxError')) {
           const maxErrorContainer = elementMaxError(defMaxError);
-          mainContainer.appendChild(maxErrorContainer);
+          divControls.appendChild(maxErrorContainer);
         }
 
         // Add volume select
-        if (!mainContainer.querySelector('#elementSoundVolume')) {
-          const soundVolumeContainer = elementSoundVolume(defSoundVolume);
-          mainContainer.appendChild(soundVolumeContainer);
-        }
+        soundDiv.innerHTML = '';
+        const soundVolumeContainer = elementSoundVolume(defSoundVolume);
+        divSound.appendChild(soundVolumeContainer);
+        const infoDivContainer = document.createElement('div');
+        infoDivContainer.id = 'infoDiv';
+        infoDiv.innerHTML =
+          '<p>&copy 2024</p><p> Nikodem Horst</p><p><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND</a></p><p><small>nvhorst@gmail.com</small></p><p><a href="https://github.com/nvhorst/atempo">GitHub</a></p>';
 
         //STATYSTYKI
         const statsChart = drawStatChart(
           window.globalIntervalStats,
-          13,
           divChartStats.offsetWidth * 0.8,
           divChartStats.offsetHeight * 0.9
         );
@@ -162,11 +177,6 @@
 
         const statsNumeric = drawNumericStatContainer();
         divNumStats.appendChild(statsNumeric);
-
-        const resetButton = document.createElement('button');
-        resetButton.textContent = '=0=';
-        resetButton.id = 'reset-btn';
-        resetButton.addEventListener('click', resetIntervalStats);
         divNumStats.appendChild(resetButton);
 
         // PRZYCISKI INTERWAŁÓW I GŁÓWNY PRZYCISK
@@ -181,6 +191,8 @@
         mainIntervalPlayButton.style.transform = 'translate(-50%, -50%)';
 
         intervalButtonsContainer.appendChild(mainIntervalPlayButton);
+
+        window.intervalButtonsContainer = intervalButtonsContainer;
 
         // GŁÓWNA PĘTLA PROGRAMU
         mainIntervalPlayButton.addEventListener('click', () => {
@@ -207,20 +219,12 @@
         divMain.style.position = 'relative';
 
         const pianoKeyboard = piano(
-          divPiano.clientHeight * 0.8,
-          divPiano.clientWidth * 0.7
+          pianoContainer.clientHeight * 0.8,
+          pianoContainer.clientWidth * 0.7
         );
         divPiano.appendChild(pianoKeyboard);
 
         updateCSSRulesFromArray(getElementCSS());
-
-        intervalButtonsContainer.style.width = `${
-          mainRefSize * window.radiusLarge * window.unitToPixel +
-          mainRefSize * intervalButtonSize * window.unitToPixel
-        }px`;
-
-        intervalButtonsContainer.style.height =
-          intervalButtonsContainer.style.width;
 
         arrangeButtonsInDoubleClock(
           intervalButtonsContainer,
@@ -237,7 +241,7 @@
           30,
           window.strokeWidth,
           '\u21BA',
-          'X'
+          '>>'
         );
         window.svg.style.display = 'none';
       }
