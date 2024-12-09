@@ -110,6 +110,7 @@ function drawStatChart(intervalStats, maxX, maxY) {
 
 function drawNumericStatContainer() {
   const numericStatContainer = document.createElement('div');
+  numericStatContainer.id = 'numStatsDivTxt';
 
   // Create and style each span element
   const totalRight = document.createElement('span');

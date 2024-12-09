@@ -1,8 +1,7 @@
-# atempo
-Musical excersies for beginners
+# atempo - Musical excersies for beginners
+
+(C) 2024 Nikodem Horst  nvhorst -- at -- gmail -- com
 
 Project under license CC BY-NC-ND.
 
-Nikodem Horst  nvhorst -- at -- gmail -- com
-
-For backward compatibility code intentionally written without modern HTML / JS / CSS. 
+For backward compatibility code intentionally written without modern HTML / JS / CSS.

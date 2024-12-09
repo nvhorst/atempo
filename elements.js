@@ -161,6 +161,18 @@ function getElementCSS() {
       'font-size',
       `${mainRefSize * 2 * window.unitToPixel}px`,
     ], //2.5
+
+    [
+      '.control-button-label svg',
+      'width',
+      `${mainRefSize * 1.5 * window.unitToPixel}px`,
+    ], //2.5
+
+    [
+      '.control-button-label svg',
+      'height',
+      `${mainRefSize * 1.5 * window.unitToPixel}px`,
+    ], //2.5
     [
       '.control-button-label',
       'margin-left',
@@ -194,8 +206,15 @@ function getElementCSS() {
       'font-size',
       `${mainRefSize * window.unitToPixel}px`,
     ], //1
-    ['span', 'font-size', `${mainRefSize * 1 * window.unitToPixel}px`], //1
+    [
+      'span',
+      'font-size',
+      `${((mainRefSize * intervalButtonSize) / 2.5) * window.unitToPixel}px`,
+    ], //1
     ['#reset-btn', 'font-size', `${mainRefSize * 2 * window.unitToPixel}px`], //2
+    ['#reset-btn', 'width', `${mainRefSize * 4 * window.unitToPixel}px`], //2
+    ['#reset-btn', 'height', `${mainRefSize * 4 * window.unitToPixel}px`], //2
     ['#stat-label-container', 'font-size', `13px`], //2
+    ['#infoDiv', 'font-size', `${mainRefSize * window.unitToPixel}px`], //2
   ];
 }

@@ -8,38 +8,37 @@ var tones = {
   startNoteFreq: 55,
   semitoneRatio: 1.059463,
 
-  playFrequency(freq) {
-    const envelope = this.context.createGain();
+  playSemitoneFrequency(freq) {
+    const obwiednia = this.context.createGain();
     const osc = this.context.createOscillator();
 
     const currentTime = this.context.currentTime;
 
-    envelope.gain.setValueAtTime(0, currentTime);
-    envelope.gain.linearRampToValueAtTime(
+    obwiednia.gain.setValueAtTime(0, currentTime);
+    obwiednia.gain.linearRampToValueAtTime(
       this.volume,
       currentTime + this.attack / 1000
     );
     this.sustain = 300;
     const sustainStart = currentTime + this.attack / 1000;
     const sustainEnd = sustainStart + this.sustain / 1000;
-    envelope.gain.setValueAtTime(this.volume, sustainStart);
+    obwiednia.gain.setValueAtTime(this.volume, sustainStart);
 
-    envelope.gain.exponentialRampToValueAtTime(
+    obwiednia.gain.exponentialRampToValueAtTime(
       0.001,
       sustainEnd + this.release / 1000
     );
-    envelope.connect(this.context.destination);
+    obwiednia.connect(this.context.destination);
 
     osc.type = this.type || 'sawtooth';
     osc.frequency.setValueAtTime(freq, currentTime);
-    osc.connect(envelope);
-
+    osc.connect(obwiednia);
     osc.start();
     osc.stop(sustainEnd + this.release / 1000);
   },
 
   play(NoteName) {
-    this.playFrequency(
+    this.playSemitoneFrequency(
       this.startNoteFreq *
         Math.pow(
           this.semitoneRatio,
@@ -126,7 +125,7 @@ function piano(parentHeight, parentWidth) {
 
   keysContainer.addEventListener('mouseup', () => {
     isMouseDown = false;
-    lastKey = null; // Reset last key on mouse release
+    lastKey = null;
   });
 
   keysContainer.addEventListener('mouseleave', () => {
@@ -135,7 +134,7 @@ function piano(parentHeight, parentWidth) {
   });
 
   for (let i = 0; i < notes.length; i++) {
-    const key = makeKey(
+    const key = appendKey(
       whiteKeyWidth * i,
       0,
       whiteKeyWidth,
@@ -149,7 +148,7 @@ function piano(parentHeight, parentWidth) {
 
   notes.forEach((element, count) => {
     if (count < notes.length - 1 && blackNotes.includes(element[0])) {
-      const key = makeKey(
+      const key = appendKey(
         whiteKeyWidth * (count + 1) - blackKeyWidth * 0.5,
         0,
         blackKeyWidth,
@@ -162,7 +161,7 @@ function piano(parentHeight, parentWidth) {
     }
   });
 
-  function makeKey(x, y, width, height, color, note) {
+  function appendKey(x, y, width, height, color, note) {
     const key = document.createElement('div');
     key.style.width = `${width}px`;
     key.style.height = `${height}px`;
@@ -174,7 +173,6 @@ function piano(parentHeight, parentWidth) {
     key.style.transition = 'background-color 0.5s ease';
     key.note = note;
 
-    // Play sound on mousedown
     key.addEventListener('mousedown', function (event) {
       tones.play(event.target.note);
       key.style.backgroundColor = attackColor;
@@ -183,12 +181,10 @@ function piano(parentHeight, parentWidth) {
       }, 300);
     });
 
-    // Prevent default drag behavior
     key.addEventListener('dragstart', (event) => {
       event.preventDefault();
     });
 
-    // Play sound on key entry during dragging
     key.addEventListener('mouseenter', function (event) {
       if (isMouseDown && lastKey !== key) {
         tones.play(event.target.note);
@@ -196,7 +192,7 @@ function piano(parentHeight, parentWidth) {
         setTimeout(() => {
           key.style.backgroundColor = color;
         }, 300);
-        lastKey = key; // Update the last key
+        lastKey = key; // Prevent dragging!
       }
     });
 
