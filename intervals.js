@@ -27,9 +27,51 @@ function refreshCharts() {
   const numericStatsContainer = document.getElementById('numStatsDiv');
   numericStatsContainer.innerHTML = ''; // Clear the current chart
   numericStatsContainer.appendChild(drawNumericStatContainer());
-  const statsContainer = document.getElementById('chartStatsDiv');
-  statsContainer.innerHTML = ''; // Clear the current chart
-  statsContainer.appendChild(drawStatChart(window.globalIntervalStats));
+  const chartStatsDiv = document.getElementById('chartStatsDiv');
+  chartStatsDiv.innerHTML = ''; // Clear the current chart
+  chartStatsDiv.appendChild(
+    drawStatChart(
+      window.globalIntervalStats,
+      13,
+      chartStatsDiv.offsetWidth * 0.9,
+      chartStatsDiv.offsetHeight * 0.9
+    )
+  );
+}
+
+function applySoundSettings() {
+  function selectOrRandomize(controlGroup, valueMapping = null) {
+    const selectedKeys = Object.keys(controlGroup).filter(
+      (key) => controlGroup[key] === 1
+    );
+    if (selectedKeys.length === 1) {
+      return valueMapping ? valueMapping[selectedKeys[0]] : selectedKeys[0];
+    }
+    const randomIndex = Math.floor(Math.random() * selectedKeys.length);
+    return valueMapping
+      ? valueMapping[selectedKeys[randomIndex]]
+      : selectedKeys[randomIndex];
+  }
+
+  // SET SOUND ORDER
+  window.soundOrder = selectOrRandomize(window.soundControl.interval);
+  if (window.soundOrder === 'up' && window.note2 <= window.note1) {
+    [window.note1, window.note2] = [window.note2, window.note1]; // Swap
+  } else if (window.soundOrder === 'down' && window.note1 <= window.note2) {
+    [window.note1, window.note2] = [window.note2, window.note1]; // Swap
+  }
+
+  // SET SOUND LENGTH
+  window.soundLength = selectOrRandomize(
+    window.soundControl.length,
+    window.lengthAndDelayValues
+  );
+
+  // SET SOUND DELAY
+  window.soundDelay = selectOrRandomize(
+    window.soundControl.delay,
+    window.lengthAndDelayValues
+  );
 }
 
 function pickRandomInterval(rangeMin, rangeMax, max, given = -1) {
@@ -94,36 +136,6 @@ function createMainPlayIntervalButton() {
 
   let blinkInterval;
   window.isPlaying = false;
-
-  // Style the circle
-  // circle.style.position = 'absolute';
-  // circle.style.width = '100%';
-  // circle.style.height = '100%';
-  // circle.style.backgroundColor = '#007bff';
-  // circle.style.borderRadius = '50%';
-  // circle.style.border = '0px solid red';
-  // circle.style.transition = 'background-color 1s';
-
-  // Style the triangle
-  // triangle.style.position = 'absolute';
-  // triangle.style.top = '50%';
-  // triangle.style.left = '55%';
-  // triangle.style.transform = 'translate(-50%, -50%)';
-  // triangle.style.width = '0';
-  // triangle.style.height = '0';
-  // triangle.style.borderTop = '20px solid transparent';
-  // triangle.style.borderBottom = '20px solid transparent';
-  // triangle.style.borderLeft = '35px solid white';
-
-  // Style the square
-  square.style.position = 'absolute';
-  square.style.top = '50%';
-  square.style.left = '50%';
-  square.style.transform = 'translate(-50%, -50%)';
-  square.style.width = '25px';
-  square.style.height = '25px';
-  square.style.backgroundColor = 'white';
-  square.style.display = 'none'; // Initially hidden
 
   function startBlinking() {
     let isDim = false;
@@ -195,13 +207,8 @@ function createIntervalButton(index, label) {
 
   intervalButton.addEventListener('mousedown', function eventMouseDown() {
     if (window.intervalToGuess === null) {
-      [window.note1, window.note2] = pickRandomInterval(
-        0,
-        12,
-        orderSelect,
-        20,
-        index
-      );
+      [window.note1, window.note2] = pickRandomInterval(0, 12, 20, index);
+      applySoundSettings();
       PlayInterval(window.note1, window.note2);
       return;
     }

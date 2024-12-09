@@ -22,7 +22,8 @@ body {
 
 #pianoContainerDiv {
   height:25%;
-  background:orange;
+  margin: 0 0 auto;
+  /* background:orange; */
   overflow: hidden;
 }
 
@@ -31,8 +32,8 @@ body {
   display:flex;
   justify-content: center;
   align-items: center;
-  height:30%;
-  background:cyan;
+  height:40%;
+  /* background:cyan; */
   overflow: hidden;
   /* column-gap */
 }
@@ -40,9 +41,21 @@ body {
 #statsContainer {
   display:flex;
   justify-content: space-around;
-  height:45%;
-  background-color: green;
-  overflow: hidden;
+  height:35%;
+  /* background-color: green; */
+  /* overflow: hidden; */
+}
+
+#numStatsDiv {
+  width:20%;
+  height:100%;
+  align-content: center;
+  margin:1rem;
+}
+
+#chartStatsDiv {
+  width:80%;
+  height: 100%;
 }
 
 @media (min-aspect-ratio : 1.3) {
@@ -56,10 +69,23 @@ body {
   }
   #statsContainer {
     position:absolute;
+    flex-direction: column;
     top:0;
     left:60%;
     width:40%;
-height:100%;
+    height:100%;
+  }
+
+  #numStatsDiv {
+    position:relative;
+    top 5%;left:5%;
+    width:100%;
+    height:30%;
+  }
+
+  #chartStatsDiv {
+    width:100%;
+    height:70%;
   }
 }
 
@@ -112,21 +138,13 @@ height:100%;
 /* STATYSTYKI I WYKRESY */
 /* ******************** */
 
-#000stats {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* width */
-  /* height */
-}
-
 #stat-chart-container {
-  height: 400px;
-  /* width: 80vw; */
+  height: 100%;
+  /* width: 100%; */
   overflow: hidden;
-  margin: 0; /* Add spacing above the chart */
+  margin: 5%; /* Add spacing above the chart */
   padding: 1rem 0px 0px 1.5rem;
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   display: flex;
   flex-direction: COLUMN;
   /* row-gap: 10px; */
@@ -140,9 +158,9 @@ height:100%;
   position: relative;
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: flex-end;
-  column-gap: 10px;
+  /* column-gap: 10px; */
   /* border: 3px dashed orange; */
   box-sizing: border-box;
 }
@@ -150,10 +168,10 @@ height:100%;
 #stat-label-container {
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
-  /* align-items: flex-start; */
-  column-gap: 10px;
-  /* border: 3px dashed orange; */
+  justify-content: space-around;
+  align-items: flex-start;
+  /* column-gap: 10px; */
+  /* border: 3px dashed cyan; */
   box-sizing: border-box;
 }
 
@@ -178,24 +196,27 @@ height:100%;
   flex-direction: column;
   align-items: flex-end;
   justify-items: left;
+  /* border:1px solid red; */
 }
 
 .stat-interval-area {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  
+  /* border: 2px dashed green; */
 }
 
 .stat-interval-label {
   text-align: center;
+  overflow: hidden;
   color: black;
   width: 100%;
-  /* font-size: 1rem; */
+  font-size: 13px;
+  /* border: 2px solid pink */
 }
 
 .stat-bar {
-  width: 1.2vw;
+  width: 5px;
 }
 
 .stat-good-bar {
@@ -208,6 +229,11 @@ height:100%;
 
 .stat-bad2-bar {
   background-color: red;
+}
+
+span {
+  display:block;
+  /* font-size */
 }
 
 /* *************** */
@@ -249,12 +275,14 @@ height:100%;
 #mainButton-square {
   position: absolute;
   top: 50%;
-  left: 55%;
+  left: 50%;
   transform: translate(-50%, -50%);
   width: 10px;
   height: 10px;
   background-color: white;
   display: none;
+  /* width */
+  /* height */
 }
 
 #btn_Repeat:hover,

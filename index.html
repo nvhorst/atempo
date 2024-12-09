@@ -16,6 +16,7 @@
         <div id="chartStatsDiv"></div>
       </div>
     </div>
+    <script src="elements.js"></script>
     <script src="intervals.js"></script>
     <script src="programcontrols.js"></script>
     <script src="piano.js"></script>
@@ -65,27 +66,6 @@
       window.soundLength = 2;
       window.soundDelay = 2;
       window.soundOrder = 1;
-      // window.
-
-      // Global state to track repetition
-      function updateCSSRulesFromArray(elementSizes) {
-        var sheet = document.styleSheets[0];
-        var rules = sheet.cssRules || sheet.rules; // Support modern and older browsers
-        elementSizes.forEach(function (entry) {
-          var selector = entry[0]; // CSS selector
-          var property = entry[1]; // CSS property
-          var value = entry[2]; // CSS value
-          for (var i = 0; i < rules.length; i++) {
-            var rule = rules[i];
-            if (rule.selectorText === selector) {
-              // Update the specific CSS property
-              rule.style[property] = value;
-              break; // Exit the loop once the rule is updated
-            }
-          }
-        });
-      }
-
       window.note1 = null; //pierwsza nuta
       window.note2 = null; //druga nuta
       window.intervalToGuess = null; //interwał (pierwsza nut-druga nuta)
@@ -118,165 +98,12 @@
       );
 
       // LAYOUT CALCULATIONS
-
       window.isPortrait = window.innerHeight > window.innerWidth;
-      window.mainUnitInt = '%';
       window.mainRefSize = 2.4;
       window.radiusLarge = 12.5;
       window.radiusSmall = 0.6 * window.radiusLarge;
 
       let intervalButtonSize = 2.5;
-
-      function getElementCSS() {
-        window.unitToPixel = !isPortrait
-          ? window.innerHeight
-          : window.innerWidth;
-        window.unitToPixel /= 100;
-        window.strokeWidth = `${4 * window.unitToPixel}px`;
-        return [
-          [
-            '#mainContainer',
-            'column-gap',
-            `${mainRefSize * 2 * window.unitToPixel}px`,
-          ],
-          ['#mainButton', 'width', `${mainRefSize * 5 * window.unitToPixel}px`], //1.5
-          [
-            '#mainButton',
-            'height',
-            `${mainRefSize * 5 * window.unitToPixel}px`,
-          ], //1.5
-          [
-            '#mainButton-triangle',
-            'border-top-width',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ], //2
-          [
-            '#mainButton-triangle',
-            'border-bottom-width',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ], //2
-          [
-            '#mainButton-triangle',
-            'border-left-width',
-            `${mainRefSize * 1.8 * window.unitToPixel}px`,
-          ], //2
-          [
-            '.interval-button',
-            'height',
-            `${mainRefSize * intervalButtonSize * window.unitToPixel}px`,
-          ], //5
-          [
-            '.interval-button',
-            'width',
-            `${mainRefSize * intervalButtonSize * window.unitToPixel}px`,
-          ], //5
-          [
-            '.btn-sector-text',
-            'font-size',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ], //2.5
-
-          [
-            '.interval-button',
-            'font-size',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ], //1.5
-          [
-            '.interval-checkbox',
-            'width',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ],
-          [
-            '.interval-checkbox',
-            'height',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ],
-
-          [
-            '#elementControlContainer',
-            'column-gap',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ], //2
-          [
-            '#controlsDiv',
-            'column-gap',
-            `${mainRefSize * 0.0 * window.unitToPixel}px`,
-          ], //2
-          [
-            '.control-subContainer',
-            'gap',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ], //6
-          [
-            '.control-subContainer-label',
-            'font-size',
-            `${mainRefSize * 2 * window.unitToPixel}px`,
-          ], //1.5 sterowanie
-
-          [
-            '.control-button',
-            'width',
-            `${mainRefSize * 3 * window.unitToPixel}px`,
-          ], //6
-          [
-            '.control-button',
-            'height',
-            `${mainRefSize * 3 * window.unitToPixel}px`,
-          ], //6
-          [
-            '.control-button',
-            'padding',
-            `${(mainRefSize / 4) * window.unitToPixel}px`,
-          ], //1
-          [
-            '.control-button-label',
-            'font-size',
-            `${mainRefSize * 2 * window.unitToPixel}px`,
-          ], //2.5
-          [
-            '.control-button-label',
-            'margin-left',
-            `${(mainRefSize / 8) * window.unitToPixel}px`,
-          ], //1
-          [
-            '.control-button-note-icon',
-            'height',
-            `${mainRefSize * 2.1 * window.unitToPixel}px`,
-          ], //2.5
-
-          [
-            '.control-button-note-icon',
-            'margin-left',
-            `${mainRefSize * 0.3 * window.unitToPixel}px`,
-          ], //2.5
-          [
-            '.control-checkbox',
-            'width',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ],
-          [
-            '.control-checkbox',
-            'height',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ],
-          [
-            '#maxErrorSelect, #soundVolumeSelect',
-            'font-size',
-            `${mainRefSize * 1 * window.unitToPixel}px`,
-          ],
-
-          [
-            '.stat-interval-label',
-            'font-size',
-            `${mainRefSize * window.unitToPixel}px`,
-          ], //1
-          [
-            '#reset-btn',
-            'font-size',
-            `${mainRefSize * 2 * window.unitToPixel}px`,
-          ], //2
-        ];
-      }
 
       function updateCheckedIntervals(visibility) {
         for (let i = 0; i < 13; i++) {
@@ -312,19 +139,25 @@
 
         const mainContainer = document.getElementById('mainContainer');
 
+        // Add No Error Select
         if (!mainContainer.querySelector('#elementMaxError')) {
           const maxErrorContainer = elementMaxError(defMaxError);
           mainContainer.appendChild(maxErrorContainer);
         }
 
-        // Add volume slider
+        // Add volume select
         if (!mainContainer.querySelector('#elementSoundVolume')) {
           const soundVolumeContainer = elementSoundVolume(defSoundVolume);
           mainContainer.appendChild(soundVolumeContainer);
         }
 
         //STATYSTYKI
-        const statsChart = drawStatChart(window.globalIntervalStats, 13);
+        const statsChart = drawStatChart(
+          window.globalIntervalStats,
+          13,
+          divChartStats.offsetWidth * 0.8,
+          divChartStats.offsetHeight * 0.9
+        );
         divChartStats.appendChild(statsChart);
 
         const statsNumeric = drawNumericStatContainer();
@@ -359,65 +192,9 @@
 
           //WYBIERZ NUTY
           [window.note1, window.note2] = pickRandomInterval(0, 12, 20);
-
-          //USTAL KOLEJNOŚĆ GRANIA LUB GRANIE W JEDNYM CZASIE
-          const selectedOrder = Object.keys(
-            window.soundControl.interval
-          ).filter((key) => window.soundControl.interval[key] === 1);
-
-          if (selectedOrder.length === 1) {
-            window.soundOrder = selectedOrder[0];
-          } else {
-            const randomIndex = Math.floor(
-              Math.random() * selectedOrder.length
-            );
-            window.soundOrder = selectedOrder[randomIndex];
-          }
-          if (window.soundOrder === 'up') {
-            if (window.note2 <= window.note1) {
-              [window.note1, window.note2] = [window.note2, window.note1]; // Zamiana miejscami
-            }
-          } else if (window.soundOrder === 'down') {
-            console.log('window.note1=', window.note1);
-            console.log('window.note2=', window.note2);
-            if (window.note1 <= window.note2) {
-              [window.note1, window.note2] = [window.note2, window.note1]; // Zamiana miejscami
-            }
-          }
-
-          //USTAL DŁUGOŚĆ DŹWIĘKU
-          const selectedLength = Object.keys(window.soundControl.length).filter(
-            (key) => window.soundControl.length[key] === 1
-          );
-          console.log('selectedSounds=', selectedLength);
-
-          if (selectedLength.length === 1) {
-            window.soundLength = window.lengthAndDelayValues[selectedLength[0]];
-          } else {
-            const randomIndex = Math.floor(
-              Math.random() * selectedLength.length
-            );
-            window.soundLength =
-              window.lengthAndDelayValues[selectedLength[randomIndex]];
-          }
-
-          //USTAL PRZERWĘ MIĘDZY DŹWIĘKAMI
-          const selectedDelay = Object.keys(window.soundControl.delay).filter(
-            (key) => window.soundControl.delay[key] === 1
-          );
-
-          if (selectedDelay.length === 1) {
-            window.soundDelay = window.lengthAndDelayValues[selectedDelay[0]];
-          } else {
-            const randomIndex = Math.floor(
-              Math.random() * selectedDelay.length
-            );
-            window.soundDelay =
-              window.lengthAndDelayValues[selectedDelay[randomIndex]];
-          }
-
           window.errorIntervalCounter = 0;
-          window.refreshCharts(); //
+          window.refreshCharts();
+          applySoundSettings();
           PlayInterval(window.note1, window.note2);
         });
 
@@ -463,10 +240,6 @@
           'X'
         );
         window.svg.style.display = 'none';
-
-        // Function to update the viewport size display
-
-        // Create the element to display viewport size
       }
 
       drawMainWindow();

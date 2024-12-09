@@ -1,10 +1,13 @@
-function drawStatChart(intervalStats, baseUnit) {
+function drawStatChart(intervalStats, fontSize, maxX, maxY) {
   const maxValue = Math.max(
     ...intervalStats.map((stat) => Math.max(stat.good, stat.bad1, stat.bad2))
   );
 
   //USTAW SKALĘ WYKRESU
-
+  let baseUnit = maxY / 27;
+  console.log('baseUnit=', baseUnit);
+  console.log('maxX=', maxX);
+  console.log('maxY=', maxY);
   const statTopSpacing = baseUnit; // Add spacing above the highest grid line
   const statChartHeight = baseUnit * 25; // Fixed height for the chart
   const statMinGridSpacing = baseUnit * 2; // Minimum spacing between grid lines
@@ -19,6 +22,8 @@ function drawStatChart(intervalStats, baseUnit) {
 
   const statChartContainer = document.createElement('div');
   statChartContainer.id = 'stat-chart-container';
+  statChartContainer.style.width = maxX;
+  statChartContainer.style.height = maxY;
 
   const statGridContainer = document.createElement('div');
   statGridContainer.id = 'stat-grid-container';
@@ -97,7 +102,6 @@ function drawStatChart(intervalStats, baseUnit) {
 }
 
 function drawNumericStatContainer() {
-  const T = 24; // Replace with your desired font size in pixels
   const numericStatContainer = document.createElement('div');
 
   // Create and style each span element
@@ -121,8 +125,6 @@ function drawNumericStatContainer() {
     mostWrong,
     mostMistaken,
   ].forEach((span) => {
-    span.style.fontSize = `${T}px`;
-    span.style.display = 'block'; // Ensures elements stack vertically
     numericStatContainer.appendChild(span);
   });
 
