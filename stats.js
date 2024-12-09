@@ -136,15 +136,15 @@ function drawNumericStatContainer() {
     window.globalIntervalStats.reduce((sum, stat) => sum + stat.bad2, 0) +
     window.errorIntervalCounter; //te o których jeszcze nie wie użytkownik;
 
-  totalRight.innerHTML = `Dobre: ${totalGood}`;
+  totalRight.innerHTML = `Dobre: ${totalGood} (${
+    totalBad2 + totalGood > 0
+      ? (100 * (totalGood / (totalBad2 + totalGood))).toFixed(0)
+      : '---'
+  }%)`;
   totalWrong.innerHTML = `Złe: ${totalBad2}`;
   totalCount.innerHTML = `Razem: ${totalGood + totalBad2}`;
-  totalPercentRight.innerHTML =
-    totalBad2 + totalGood > 0
-      ? `Procent: ${(100 * (totalGood / (totalBad2 + totalGood))).toFixed(0)}%`
-      : '---%';
 
-  totalIncorrectGuess.innerHTML = `${
+  totalIncorrectGuess.innerHTML = `Błędy: ${
     window.errorIntervalCounter > window.maxError
       ? '*'
       : window.errorIntervalCounter
@@ -181,11 +181,11 @@ function resetIntervalStats() {
       bad2: 0,
     })
   );
-  const numericStatsContainer = document.getElementById('numeric_stats');
+  const numericStatsContainer = document.getElementById('numStatsDiv');
   numericStatsContainer.innerHTML = ''; // Clear the current chart
   numericStatsContainer.appendChild(drawNumericStatContainer());
 
-  const statsContainer = document.getElementById('stats');
-  statsContainer.innerHTML = ''; // Clear the current chart
-  statsContainer.appendChild(drawStatChart(window.globalIntervalStats));
+  const chartStatsContainer = document.getElementById('chartStatsDiv');
+  chartStatsContainer.innerHTML = ''; // Clear the current chart
+  chartStatsContainer.appendChild(drawStatChart(window.globalIntervalStats));
 }
