@@ -21,7 +21,8 @@ function getElementCSS() {
   window.unitToPixel /= 100;
   window.optimumWheelDiameter =
     document.getElementById('mainContainer').offsetHeight * 0.9;
-  //skoryguj wielkość optimumWheelDiameter
+
+  //skoryguj wielkość optimumWheelDiameter jeśli jest zła
   const mainDivWidth = document
     .getElementById('mainContainer')
     .getBoundingClientRect().width;
@@ -33,11 +34,13 @@ function getElementCSS() {
   const controlsDivColumnGap =
     window.mainRefSize * window.intervalButtonSize * window.unitToPixel;
   if (
-    controlsDivWidth + window.optimumWheelDiameter + controlsDivColumnGap * 3 >
+    controlsDivWidth +
+      window.optimumWheelDiameter +
+      controlsDivColumnGap * 2.5 >
     mainDivWidth
   ) {
     optimumWheelDiameter =
-      mainDivWidth - controlsDivWidth - 3 * controlsDivColumnGap;
+      mainDivWidth - controlsDivWidth - 2.5 * controlsDivColumnGap;
   }
 
   window.intervalButtonSize =

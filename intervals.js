@@ -105,12 +105,12 @@ function PlayInterval(note1, note2) {
   tones.release = window.soundLength * 400;
   tones.sustain = 0;
   if (window.soundOrder === 'both') {
-    keys[firstNote].dispatchEvent(new MouseEvent('mousedown'));
-    keys[secondNote].dispatchEvent(new MouseEvent('mousedown'));
+    keys[firstNote].dispatchEvent(new MouseEvent('click'));
+    keys[secondNote].dispatchEvent(new MouseEvent('click'));
   } else {
-    keys[firstNote].dispatchEvent(new MouseEvent('mousedown'));
+    keys[firstNote].dispatchEvent(new MouseEvent('click'));
     setTimeout(() => {
-      keys[secondNote].dispatchEvent(new MouseEvent('mousedown'));
+      keys[secondNote].dispatchEvent(new MouseEvent('click'));
     }, 300 + (window.soundDelay - 1) * 500); //300 800 1100 - dopasowane do długości dźwięków
   }
 }
@@ -202,12 +202,17 @@ function createIntervalButton(index, label) {
   intervalButton.id = `intervalButton-${index}`;
   intervalButton.classList.add('interval-button');
 
-  // Add event listener to check if the button's index matches intervalToGuess
-  intervalButton.addEventListener('mouseup', () => {
-    intervalButton.style.backgroundColor = ''; // Revert to default background on mouseup
+  intervalButton.addEventListener('mouseenter', function eventMouseEnter() {
+    intervalButton.style.background = 'blue';
+    intervalButton.style.color = 'white';
   });
 
-  intervalButton.addEventListener('mousedown', function eventMouseDown() {
+  intervalButton.addEventListener('mouseenter', function eventMouseEnter() {
+    intervalButton.style.background = '';
+    intervalButton.style.color = '';
+  });
+
+  intervalButton.addEventListener('click', function eventMouseClick() {
     if (window.intervalToGuess === null) {
       [window.note1, window.note2] = pickRandomInterval(0, 12, 20, index);
       applySoundSettings();
@@ -216,9 +221,8 @@ function createIntervalButton(index, label) {
     }
     // Determine the color based on the condition
     const color = index === window.intervalToGuess ? 'lawngreen' : 'red';
-
     // Immediately set the color without transition
-    intervalButton.style.transition = 'none'; // Disable any existing transitions
+    // intervalButton.style.transition = 'none'; // Disable any existing transitions
     intervalButton.style.backgroundColor = color;
 
     if (index === window.intervalToGuess) {
@@ -230,9 +234,13 @@ function createIntervalButton(index, label) {
     refreshCharts();
     // Use a short timeout to allow re-rendering before applying transition
     setTimeout(() => {
-      intervalButton.style.transition = 'background-color 1s ease-in'; // Add transition
-      intervalButton.style.backgroundColor = ''; // Reset to the default color
+      intervalButton.style.transition = 'background-color 3s ease'; // Add transition
+      intervalButton.style.backgroundColor = '#fff4cd'; // Reset to the default color
+      intervalButton.style.color = 'black'; // Reset to the default color
     }, 10); // Slight delay to ensure the browser registers the immediate style change
+    setTimeout(() => {
+      intervalButton.style.removeProperty('transition'); // Remove transition after 2s
+    }, 3000);
   });
   window.refreshCharts = refreshCharts;
 

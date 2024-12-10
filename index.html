@@ -188,8 +188,9 @@
         divSound.appendChild(soundVolumeContainer);
         const infoDivContainer = document.createElement('div');
         infoDivContainer.id = 'infoDiv';
-        infoDiv.innerHTML =
-          '<p>&copy 2024 v0.1</p><p> Nikodem Horst</p><p><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND</a></p><p><small>nvhorst@gmail.com</small></p><p><a href="https://github.com/nvhorst/atempo">GitHub</a></p>';
+        infoDiv.innerHTML = 
+        '<p>&copy 2024 v0.1&nbsp</p><p>Nikodem Horst&nbsp</p><p>(nvhorst@gmail)&nbsp</p><p><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND</a>&nbsp</p><p><a href="https://github.com/nvhorst/atempo">GitHub</a></p>';
+        // `W=${window.innerWidth} x H=${window.innerHeight}`;
 
         //STATYSTYKI
         const statsChart = drawStatChart(
@@ -244,7 +245,7 @@
 
         const pianoKeyboard = piano(
           pianoContainer.clientHeight * 0.8,
-          pianoContainer.clientWidth * 0.7
+          pianoContainer.clientWidth *0.9
         );
         divPiano.appendChild(pianoKeyboard);
 
