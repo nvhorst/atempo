@@ -152,7 +152,7 @@ function drawNumericStatContainer() {
       : '---'
   }%)`;
   totalWrong.innerHTML = `\u{1F494} ${totalBad2}`;
-  totalCount.innerHTML = `\u{2B50}+\u{1F494} ${totalGood + totalBad2}`;
+  totalCount.innerHTML = `<small>&nbsp</small> = &nbsp${totalGood + totalBad2}`;
   insertBrake.innerHTML = '&nbsp';
   totalIncorrectGuess.innerHTML = `\u{274C} ${
     window.errorIntervalCounter > window.maxError
