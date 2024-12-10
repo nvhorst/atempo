@@ -16,7 +16,36 @@ function updateCSSRulesFromArray(elementSizes) {
   });
 }
 
+//CZY ELEMENT WYSTAJE?
+function isOverflowing(element) {
+  return {
+    horizontal: element.scrollWidth > element.clientWidth,
+    vertical: element.scrollHeight > element.clientHeight,
+    any:
+      element.scrollWidth > element.clientWidth ||
+      element.scrollHeight > element.clientHeight,
+  };
+}
+
+//PRZELICZ LAYOUT
 function getElementCSS() {
+  //nagłówek: infoDiv i soundVolumeDiv
+  const infoDiv = document.getElementById('infoDiv');
+  infoDiv.style.flexDirection = isOverflowing(
+    document.getElementById('pianoContainer')
+  ).vertical
+    ? 'row'
+    : 'column';
+
+  const elementSoundVolume = document.getElementById('elementSoundVolume');
+
+  elementSoundVolume.style.flexDirection =
+    isOverflowing(document.getElementById('pianoContainer')).vertical &&
+    infoDiv.style.flexDirection === 'row'
+      ? 'row'
+      : 'column';
+
+  //przelicz główne koordynaty
   window.unitToPixel = !isPortrait ? window.innerHeight : window.innerWidth;
   window.unitToPixel /= 100;
   window.optimumWheelDiameter =
@@ -43,17 +72,19 @@ function getElementCSS() {
       mainDivWidth - controlsDivWidth - 2.5 * controlsDivColumnGap;
   }
 
+  //przelicz wartości referencyjne - taką wartością jest intervalButtonSize!
   window.intervalButtonSize =
     window.optimumWheelDiameter / window.unitToPixel / window.mainRefSize / 6;
   window.radiusLarge = 5 * window.intervalButtonSize;
   window.radiusSmall = 0.6 * window.radiusLarge;
   window.strokeWidth = `${4 * window.unitToPixel}px`;
 
+  //uaktualniej rozmiar kontenera
   window.intervalButtonsContainer.style.width = `${
     mainRefSize *
     window.unitToPixel *
     (window.radiusLarge + window.intervalButtonSize)
-    // (6 * window.intervalButtonSize)
+    // ==(6 * window.intervalButtonSize)
   }px`;
 
   intervalButtonsContainer.style.height = intervalButtonsContainer.style.width;
@@ -89,12 +120,12 @@ function getElementCSS() {
     [
       '#mainButton-square',
       'width',
-      `${mainRefSize * 1 * window.unitToPixel}px`,
+      `${mainRefSize * 1.25 * window.unitToPixel}px`,
     ], //2
     [
       '#mainButton-square',
       'height',
-      `${mainRefSize * 1 * window.unitToPixel}px`,
+      `${mainRefSize * 1.25 * window.unitToPixel}px`,
     ], //2
 
     [
@@ -138,13 +169,13 @@ function getElementCSS() {
     [
       '#elementControlContainer',
       'column-gap',
-      `${mainRefSize * 2 * window.unitToPixel}px`,
+      `${mainRefSize * 1 * window.unitToPixel}px`,
     ], //2
-    ['#controlsDiv', 'column-gap', `${mainRefSize * 1 * window.unitToPixel}px`], //2
+    ['#controlsDiv', 'column-gap', `${mainRefSize * window.unitToPixel}px`], //2
     [
       '.control-subContainer',
       'gap',
-      `${mainRefSize * 1 * window.unitToPixel}px`,
+      `${mainRefSize * 0.5 * window.unitToPixel}px`,
     ], //6
     [
       '.control-subContainer-label',
@@ -223,6 +254,30 @@ function getElementCSS() {
       '#numStatTable',
       'font-size',
       `${mainRefSize * 1.5 * window.unitToPixel}px`,
+    ], //2
+    [
+      '#numStatTable',
+      'border-radius',
+      `${
+        (mainRefSize * window.unitToPixel * 0.5 * intervalButtonSize) / 2.5
+      }px`,
+    ], //2
+    [
+      '#numStatTable',
+      'border-width',
+      `${
+        (mainRefSize * window.unitToPixel * 0.125 * intervalButtonSize) / 2.5
+      }px`,
+    ], //2
+    [
+      '#svg-icon-speaker',
+      'width',
+      `${mainRefSize * window.unitToPixel * 2.5}px`,
+    ], //2
+    [
+      '#svg-icon-speaker',
+      'height',
+      `${mainRefSize * window.unitToPixel * 2.5}px`,
     ], //2
   ];
 }

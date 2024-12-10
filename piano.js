@@ -8,6 +8,7 @@ var tones = {
   startNoteFreq: 55,
   semitoneRatio: 1.059463,
 
+  //graj zgodnie z częstowliwością!
   playSemitoneFrequency(freq) {
     const obwiednia = this.context.createGain();
     const osc = this.context.createOscillator();
@@ -70,10 +71,10 @@ var tones = {
 tones.context.createGain();
 window.tones = tones;
 
-// Declare keys as a global variable
 var keys = {};
-window.keys = keys; // Attach keys to the global window object
+window.keys = keys;
 
+//UKŁAD KLAWIATURKI
 function piano(parentHeight, parentWidth) {
   const pianoDiv = document.createElement('div');
   tones.attack = 100;
@@ -161,6 +162,7 @@ function piano(parentHeight, parentWidth) {
     }
   });
 
+  //dodaj klawisz
   function appendKey(x, y, width, height, color, note) {
     const key = document.createElement('div');
     key.style.width = `${width}px`;

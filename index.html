@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pl">
   <head>
     <meta name="author" content="Nikodem Horst" />
@@ -22,21 +23,24 @@
       content="Naucz się rozpoznawać interwały. Learn to recognize intervals."
     />
     <meta property="og:url" content="https://atempo.pl" />
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#000000" />
     <title>ATempo</title>
     <link rel="stylesheet" href="nutka.css" />
   </head>
   <body>
-    <div class="mainProgram">
+    <div class="mainProgram" style="height: 100%">
+      <!-- KONTENER PIANINO -->
       <div id="pianoContainer">
         <div id="soundDiv"></div>
         <div id="pianoDiv"></div>
         <div id="infoDiv"></div>
       </div>
+      <!-- KONTENER STERUJĄCY -->
       <div id="mainContainer">
         <div id="controlsDiv"></div>
         <div id="mainDiv"></div>
       </div>
+      <!-- KONTENER STATYSTYCZNY -->
       <div id="statsContainer">
         <div id="numStatsDiv"></div>
         <div id="chartStatsDiv"></div>
@@ -92,7 +96,8 @@
       // ZMIENNE GLOBALNE
 
       window.defMaxError = 3;
-      window.defSoundVolume = 2;
+      window.defSoundVolume = 20;
+      window.soundVolume = 20;
       window.soundLength = 2;
       window.soundDelay = 2;
       window.soundOrder = 1;
@@ -133,12 +138,14 @@
       window.radiusLarge = 5 * window.intervalButtonSize;
       window.radiusSmall = 0.6 * window.radiusLarge;
 
+      // PRZYCISK RESET
       const resetButton = document.createElement('button');
       resetButton.innerHTML = '&nbsp0&nbsp';
       resetButton.id = 'reset-btn';
       resetButton.addEventListener('click', resetIntervalStats);
       window.resetButton = resetButton;
 
+      // UAKTUALNIANIE INTERWAŁÓW ZGODNIE Z ZAZNACZENIEM
       function updateCheckedIntervals(visibility) {
         for (let i = 0; i < 13; i++) {
           const checkbox = document.getElementById(`intervalCheckbox-${i}`);
@@ -150,6 +157,7 @@
         }
       }
 
+      // GŁÓWNA FUNKCJA RYSUJĄCA
       function drawMainWindow() {
         // WYMIARY
         // document.documentElement.style.height = document.body.clientHeight;
@@ -176,20 +184,20 @@
 
         const mainContainer = document.getElementById('mainContainer');
 
-        // Add No Error Select
+        // POLE ILOŚCI BŁĘDÓW
         if (!mainContainer.querySelector('#elementMaxError')) {
           const maxErrorContainer = elementMaxError(defMaxError);
           divControls.appendChild(maxErrorContainer);
         }
 
-        // Add volume select
+        // POLE GŁOŚNOŚCI
         soundDiv.innerHTML = '';
         const soundVolumeContainer = elementSoundVolume(defSoundVolume);
         divSound.appendChild(soundVolumeContainer);
         const infoDivContainer = document.createElement('div');
         infoDivContainer.id = 'infoDiv';
-        infoDiv.innerHTML = 
-        '<p>&copy 2024 v0.1&nbsp</p><p>Nikodem Horst&nbsp</p><p>(nvhorst@gmail)&nbsp</p><p><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND</a>&nbsp</p><p><a href="https://github.com/nvhorst/atempo">GitHub</a></p>';
+        infoDiv.innerHTML =
+          '<p>&copy 2024 v0.1&nbsp</p><p>Nikodem Horst&nbsp</p><p>(nvhorst@gmail)&nbsp</p><p><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND</a>&nbsp</p><p><a href="https://github.com/nvhorst/atempo">GitHub</a></p>';
         // `W=${window.innerWidth} x H=${window.innerHeight}`;
 
         //STATYSTYKI
@@ -204,22 +212,21 @@
         divNumStats.appendChild(statsNumeric);
         divNumStats.appendChild(resetButton);
 
-        // PRZYCISKI INTERWAŁÓW I GŁÓWNY PRZYCISK
-
+        // PRZYCISKI STEROWANIA INTERWAŁAMI
+        // GŁÓWNY PRZYCISK
         const intervalButtonsContainer = document.createElement('div');
         intervalButtonsContainer.id = 'interval-buttons-container';
 
         const mainIntervalPlayButton = createMainPlayIntervalButton();
         mainIntervalPlayButton.style.left = '50%';
         mainIntervalPlayButton.style.top = '50%';
-        // mainIntervalPlayButton.style.border = '3px solid violet';
         mainIntervalPlayButton.style.transform = 'translate(-50%, -50%)';
 
         intervalButtonsContainer.appendChild(mainIntervalPlayButton);
 
         window.intervalButtonsContainer = intervalButtonsContainer;
 
-        // GŁÓWNA PĘTLA PROGRAMU
+        // LOGIKA GŁÓWNEGO PRZYCISKU
         mainIntervalPlayButton.addEventListener('click', () => {
           if (window.isPlaying === false) {
             window.intervalToGuess = null;
@@ -227,14 +234,15 @@
           }
           if (window.intervalToGuess !== null) return;
 
-          //WYBIERZ NUTY
+          //wybierz nuty, odśwież licznik i statystyki, zastosuj ustawienia i zagraj
           [window.note1, window.note2] = pickRandomInterval(0, 12, 20);
           window.errorIntervalCounter = 0;
           window.refreshCharts();
-          applySoundSettings();
+          applySoundSettings(); //zastosuj ustawienia z kontrolek (controlsDiv)
           PlayInterval(window.note1, window.note2);
         });
 
+        //PRZYCISKI INERWAŁÓW
         buttonLabels.forEach((label, index) => {
           const elementIntervalButton = createIntervalButton(index, label);
           intervalButtonsContainer.appendChild(elementIntervalButton);
@@ -243,14 +251,17 @@
         divMain.appendChild(intervalButtonsContainer);
         divMain.style.position = 'relative';
 
+        //KLAWIATURA
         const pianoKeyboard = piano(
           pianoContainer.clientHeight * 0.8,
-          pianoContainer.clientWidth *0.9
+          pianoContainer.clientWidth * 0.9
         );
         divPiano.appendChild(pianoKeyboard);
 
+        //PRZELICZ LAYOUT
         updateCSSRulesFromArray(getElementCSS());
 
+        //UŁÓŻ PRZYCISKI PROMIENIŚCIE
         arrangeButtonsInDoubleClock(
           intervalButtonsContainer,
           mainRefSize * window.radiusSmall * window.unitToPixel,
@@ -271,6 +282,7 @@
         window.svg.style.display = 'none';
       }
 
+      applySoundSettings();
       drawMainWindow();
 
       window.addEventListener('resize', () => {
@@ -279,4 +291,4 @@
       });
     </script>
   </body>
-</!DOCTYPE>
+</html>

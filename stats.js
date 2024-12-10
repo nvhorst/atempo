@@ -1,15 +1,13 @@
+//RYSUJ WYKRES
 function drawStatChart(intervalStats, maxX, maxY) {
   const maxValue = Math.max(
     ...intervalStats.map((stat) => Math.max(stat.good, stat.bad1, stat.bad2))
   );
   //USTAW SKALĘ WYKRESU
   let baseUnit = maxY / 27;
-  // console.log('baseUnit=', baseUnit);
-  // console.log('maxX=', maxX);
-  // console.log('maxY=', maxY);
-  const statTopSpacing = baseUnit; // Add spacing above the highest grid line
-  const statChartHeight = baseUnit * 25; // Fixed height for the chart
-  const statMinGridSpacing = baseUnit * 2; // Minimum spacing between grid lines
+  const statTopSpacing = baseUnit; // odstęp nad siatką
+  const statChartHeight = baseUnit * 25; // wysokość
+  const statMinGridSpacing = baseUnit * 2; // odstępy między liniami siatki
   const statGridLineSpacing = (statChartHeight - statTopSpacing) / maxValue;
 
   //USTAW CO ILE POWINNA BYĆ JEDNOSTKA
@@ -22,7 +20,6 @@ function drawStatChart(intervalStats, maxX, maxY) {
   const statChartContainer = document.createElement('div');
   statChartContainer.id = 'stat-chart-container';
   statChartContainer.style.width = maxX;
-  // statChartContainer.style.height = maxY * 0.9;
 
   const statGridContainer = document.createElement('div');
   statGridContainer.id = 'stat-grid-container';
@@ -53,7 +50,7 @@ function drawStatChart(intervalStats, maxX, maxY) {
     statGridLine.style.bottom = `${statGridPosition}px`;
     statGridContainer.appendChild(statGridLine);
 
-    // Add label only if value is not 0
+    // dodaj etykietę jeśli !0
     if (i !== 0) {
       const gridLabel = document.createElement('div');
       gridLabel.classList.add('stat-grid-label');
@@ -107,11 +104,11 @@ function drawStatChart(intervalStats, maxX, maxY) {
   return statChartContainer;
 }
 
+//statystyki numeryczne
 function drawNumericStatContainer() {
   const numericStatContainer = document.createElement('div');
   numericStatContainer.id = 'numStatsDivTxt';
 
-  // Create and style each span element
   const totals = document.createElement('span');
   const insertBrake = document.createElement('span');
   const totalPercentRight = document.createElement('span');
@@ -142,7 +139,7 @@ function drawNumericStatContainer() {
     window.globalIntervalStats.reduce((sum, stat) => sum + stat.bad2, 0) +
     window.errorIntervalCounter; //te o których jeszcze nie wie użytkownik;
 
-  totals.innerHTML = `<table id=NumStatTable><tr><td>\u{2B50}</td><td>${totalGood} (${
+  totals.innerHTML = `<table id=numStatTable><tr><td>\u{2B50}</td><td>${totalGood} (${
     totalBad2 + totalGood > 0
       ? (100 * (totalGood / (totalBad2 + totalGood))).toFixed(0)
       : '---'
@@ -174,6 +171,7 @@ function drawNumericStatContainer() {
   return numericStatContainer;
 }
 
+// logika przycisku RESET
 function resetIntervalStats() {
   // Reset globalIntervalStats
   window.globalIntervalStats = Array.from(

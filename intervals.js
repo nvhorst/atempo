@@ -1,5 +1,3 @@
-// intervalHandler.js
-
 const notes = [
   'a2',
   'a#2',
@@ -23,13 +21,14 @@ const notes = [
   'e4',
 ];
 
+//ODŚWIEŻENIE STATYSTYK - DYNAMICZNE, DLATEEGO W TYM PLIKU
 function refreshCharts() {
   const numericStatsContainer = document.getElementById('numStatsDiv');
-  numericStatsContainer.innerHTML = ''; // Clear the current chart
+  numericStatsContainer.innerHTML = '';
   numericStatsContainer.appendChild(drawNumericStatContainer());
   numericStatsContainer.appendChild(window.resetButton);
   const chartStatsDiv = document.getElementById('chartStatsDiv');
-  chartStatsDiv.innerHTML = ''; // Clear the current chart
+  chartStatsDiv.innerHTML = '';
   chartStatsDiv.appendChild(
     drawStatChart(
       window.globalIntervalStats,
@@ -39,7 +38,9 @@ function refreshCharts() {
   );
 }
 
+//USTAW PARAMETRY DŹWIĘKU DO ODTWORZENIA
 function applySoundSettings() {
+  console.log('in!');
   function selectOrRandomize(controlGroup, valueMapping = null) {
     const selectedKeys = Object.keys(controlGroup).filter(
       (key) => controlGroup[key] === 1
@@ -53,7 +54,7 @@ function applySoundSettings() {
       : selectedKeys[randomIndex];
   }
 
-  // SET SOUND ORDER
+  //kolejność odtwarzania
   window.soundOrder = selectOrRandomize(window.soundControl.interval);
   if (window.soundOrder === 'up' && window.note2 <= window.note1) {
     [window.note1, window.note2] = [window.note2, window.note1]; // Swap
@@ -61,19 +62,24 @@ function applySoundSettings() {
     [window.note1, window.note2] = [window.note2, window.note1]; // Swap
   }
 
-  // SET SOUND LENGTH
+  //długość dźwięku
   window.soundLength = selectOrRandomize(
     window.soundControl.length,
     window.lengthAndDelayValues
   );
 
-  // SET SOUND DELAY
+  //opóźnienie drugiego dźwięku
   window.soundDelay = selectOrRandomize(
     window.soundControl.delay,
     window.lengthAndDelayValues
   );
+
+  tones.volume = window.soundVolume / 100; //
+  tones.release = window.soundLength * 400;
+  tones.sustain = 0;
 }
 
+//FUNKCJA WYBORU INTERWAŁU (LOSOWANIE DWÓCH LICZB Z ZADANEGO ZAKRESU)
 function pickRandomInterval(rangeMin, rangeMax, max, given = -1) {
   //od, do, w górę-w dół, maks ilość dźwięków do wyboru
   let i = 0;
@@ -98,12 +104,10 @@ function pickRandomInterval(rangeMin, rangeMax, max, given = -1) {
   return [num1, num2];
 }
 
+//ZAGRAJ INTERWAŁ - NUTA 1 I NUTA 2; PARAMETRY DO OTWARZANIA: applySoundSettings()
 function PlayInterval(note1, note2) {
   const firstNote = notes[note1];
   const secondNote = notes[note2];
-  tones.volume = window.soundVolume / 100; //
-  tones.release = window.soundLength * 400;
-  tones.sustain = 0;
   if (window.soundOrder === 'both') {
     keys[firstNote].dispatchEvent(new MouseEvent('click'));
     keys[secondNote].dispatchEvent(new MouseEvent('click'));
@@ -115,26 +119,27 @@ function PlayInterval(note1, note2) {
   }
 }
 
+//GłÓWNY PRZYCISK - PLAY
 function createMainPlayIntervalButton() {
   const mainExcerciseButton = document.createElement('div');
   mainExcerciseButton.id = 'mainButton';
 
-  // Create the circle
+  //kółeczko wokół bazy
   const circle = document.createElement('div');
   circle.id = 'mainButton-circle';
   mainExcerciseButton.appendChild(circle);
 
-  // Create the triangle
+  //trójkącik jak hawajska
   const triangle = document.createElement('div');
   triangle.id = 'mainButton-triangle';
   circle.appendChild(triangle);
 
-  // Create the square
+  //kwadracik
   const square = document.createElement('div');
   square.id = 'mainButton-square';
   circle.appendChild(square);
 
-  let blinkInterval;
+  let blinkInterval; // czy mruga? ==czy sprawdza statystyki?
   window.isPlaying = false;
 
   function startBlinking() {
@@ -179,12 +184,14 @@ function createMainPlayIntervalButton() {
 // Attach the function to the global object
 window.createMainPlayIntervalButton = createMainPlayIntervalButton;
 
+//WYKONAJ POWTÓRKĘ INTERWAŁU
 function scheduleReplay() {
   setTimeout(() => {
     PlayInterval(window.note1, window.note2); // Replay the current interval
   }, 700);
 }
 
+//ZAPLANUJ KOLEJNY INTERWAŁ
 function scheduleNextInterval() {
   setTimeout(() => {
     const clickEvent = new MouseEvent('click', {
@@ -196,6 +203,7 @@ function scheduleNextInterval() {
   }, 700);
 }
 
+//UTWÓRZ POJEDYNCZY PRZYCISK INTERWAŁU
 function createIntervalButton(index, label) {
   const intervalButton = document.createElement('button');
   intervalButton.textContent = label;
@@ -219,10 +227,8 @@ function createIntervalButton(index, label) {
       PlayInterval(window.note1, window.note2);
       return;
     }
-    // Determine the color based on the condition
-    const color = index === window.intervalToGuess ? 'lawngreen' : 'red';
-    // Immediately set the color without transition
-    // intervalButton.style.transition = 'none'; // Disable any existing transitions
+    const color = index === window.intervalToGuess ? 'lawngreen' : 'red'; //kliknięcie OK - zielone, nieOK - czerwone
+
     intervalButton.style.backgroundColor = color;
 
     if (index === window.intervalToGuess) {
@@ -232,18 +238,19 @@ function createIntervalButton(index, label) {
     }
 
     refreshCharts();
-    // Use a short timeout to allow re-rendering before applying transition
+
     setTimeout(() => {
-      intervalButton.style.transition = 'background-color 3s ease'; // Add transition
-      intervalButton.style.backgroundColor = '#fff4cd'; // Reset to the default color
-      intervalButton.style.color = 'black'; // Reset to the default color
-    }, 10); // Slight delay to ensure the browser registers the immediate style change
+      intervalButton.style.transition = 'background-color 3s ease';
+      intervalButton.style.backgroundColor = '#fff4cd'; //kolor bieżący
+      intervalButton.style.color = 'black'; // kolor bieżący
+    }, 10); // opóźnienie żeby przeglądarka ogarnęła
     setTimeout(() => {
-      intervalButton.style.removeProperty('transition'); // Remove transition after 2s
+      intervalButton.style.transition = ''; // zeruj
     }, 3000);
   });
   window.refreshCharts = refreshCharts;
 
+  //akcja: poprawny wybór
   function handleCorrectGuess(index) {
     window.globalIntervalStats[index].good += 1;
     window.globalIntervalStats[window.intervalToGuess].bad2 +=
@@ -253,6 +260,7 @@ function createIntervalButton(index, label) {
     scheduleNextInterval();
   }
 
+  //akcja: niepoprawny wybór
   function handleIncorrectGuess(index) {
     window.globalIntervalStats[index].bad1++;
 
@@ -275,8 +283,11 @@ function createIntervalButton(index, label) {
     }
   }
 
-  const intervalButtonWrapper = document.createElement('div');
-  // Create the checkbox
+  //wrapper do PRZYCISKU I CHECKBOXA INTERWAŁU
+  const intervalButtonWrapper = document.createElement('label');
+  intervalButtonWrapper.style.whiteSpace = 'nowrap'; //żeby nie wyjeżdżało
+  intervalButtonWrapper.setAttribute('for', `intervalCheckbox-${index}`);
+
   const intervalCheckbox = document.createElement('input');
   intervalCheckbox.type = 'checkbox';
   intervalCheckbox.classList.add('interval-checkbox');
@@ -286,7 +297,7 @@ function createIntervalButton(index, label) {
     let intervalCheckedCount = 0;
     window.checkedIntervals = '';
 
-    // First pass: Calculate intervalCheckedCount and update window.checkedIntervals
+    // uaktualniej wartość globalną window.checkedIntervals zgodnie ze stanem checkboxów
     for (let i = 0; i < 13; i++) {
       const checkbox = document.getElementById(`intervalCheckbox-${i}`);
       if (checkbox && checkbox.checked) {
@@ -297,27 +308,26 @@ function createIntervalButton(index, label) {
       }
     }
 
-    // Check if fewer than two checkboxes are checked
+    // czy zaznaczone mniej niż 2 (jeden ma być zawsze załączony!)
     if (intervalCheckedCount < 2) {
-      event.preventDefault(); // Prevent the change
-      intervalCheckbox.checked = true; // Force rechecking
+      event.preventDefault();
+      intervalCheckbox.checked = true;
       alert('Zostaw zaznaczone przynajmniej dwa interwały.');
-      return; // Exit to prevent disabling any buttons
+      return;
     }
 
-    // Second pass: Enable/disable buttons based on checkbox states
+    // uaktualnij stan przycisków zgodnie z wartością window.checkedIntervals
     updateCheckedIntervals(true);
   });
 
-  // Create a wrapper for button and checkbox
+  //dołącz do wrappera
   intervalButtonWrapper.appendChild(intervalButton);
   intervalButtonWrapper.appendChild(intervalCheckbox);
 
-  intervalButtonWrapper.style.whiteSpace = 'nowrap'; //żeby nie wyjeżdżało
-
-  // Add the wrapper to the buttonRow
   return intervalButtonWrapper;
 }
+
+//ułóż przyciski na tarczy
 
 const arrangeButtonsInDoubleClock = (container, radius1, radius2) => {
   const collectChildren = (container, mainButton) => {
@@ -351,7 +361,7 @@ const arrangeButtonsInDoubleClock = (container, radius1, radius2) => {
     });
   };
 
-  // Extract container center and child groups
+  //ustal parametry rodzica do pozycjonowania przycisków
   const { firstChildren, secondChildren } = collectChildren(
     container,
     mainButton
@@ -364,6 +374,7 @@ const arrangeButtonsInDoubleClock = (container, radius1, radius2) => {
   arrangeCircle(secondChildren, radius1, centerX, centerY);
 };
 
+//dodaj dwa przyciski łukowe (widoczne po kliknięciu play)
 function addArcSegmentWithMirror(
   parentContainer,
   cx,
@@ -444,12 +455,12 @@ function addArcSegmentWithMirror(
 
   const svgSize = (r + padding) * 2;
 
-  // Create the SVG container
+  //utwórz kontener SVG
   const svg = document.createElementNS(svgNS, 'svg');
   svg.setAttribute('width', svgSize);
   svg.setAttribute('height', svgSize);
 
-  // Use `transform: translate` to center the SVG
+  // centruj SVG
   svg.style.position = 'absolute';
   svg.style.top = '50%';
   svg.style.left = '50%';
@@ -457,22 +468,17 @@ function addArcSegmentWithMirror(
   svg.style.zIndex = -'-9999';
   svg.style.pointerEvents = 'none';
 
-  // Calculate SVG size and offsets for centering
-
-  // Center the SVG viewBox
-  const viewBoxX = cx - r - padding; //- padding;
-  const viewBoxY = cy - r - padding; //- padding;
+  // srodek SVG - obliczenia
+  const viewBoxX = cx - r - padding;
+  const viewBoxY = cy - r - padding;
   const viewBoxSize = svgSize;
 
-  // Create the SVG container
-  svg.setAttribute('width', svgSize);
-  svg.setAttribute('height', svgSize);
   svg.setAttribute(
     'viewBox',
     `${viewBoxX} ${viewBoxY} ${viewBoxSize} ${viewBoxSize}`
   );
 
-  // Add original arc
+  // DODAJ ŁUK
   const { path: originalArc, textElement: originalText } = createArcPath(
     startAngle,
     endAngle,
@@ -480,7 +486,6 @@ function addArcSegmentWithMirror(
     text,
     'btn_Repeat',
     () => {
-      // window.globalIntervalStats[window.intervalToGuess].bad2++;
       window.errorIntervalCounter++;
       scheduleReplay();
       refreshCharts(false);
@@ -489,7 +494,7 @@ function addArcSegmentWithMirror(
   svg.appendChild(originalArc);
   svg.appendChild(originalText);
 
-  // Add vertically mirrored arc
+  // DODAJ ŁUK LUSTRZANY
   const mirroredStartAngle = 180 - endAngle;
   const mirroredEndAngle = 180 - startAngle;
   const { path: mirroredArc, textElement: mirroredTextElement } = createArcPath(
@@ -506,11 +511,11 @@ function addArcSegmentWithMirror(
       refreshCharts(true);
     }
   );
+
   svg.appendChild(mirroredArc);
   svg.appendChild(mirroredTextElement);
 
   window.svg = svg;
 
-  // Append the SVG to the parent container
   parentContainer.appendChild(svg);
 }
