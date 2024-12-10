@@ -146,9 +146,9 @@ function drawNumericStatContainer() {
     totalBad2 + totalGood > 0
       ? (100 * (totalGood / (totalBad2 + totalGood))).toFixed(0)
       : '---'
-  }%)</td></tr><tr><td>\u{1F494}</td><td>${totalBad2}</td></tr><tr><td style="text-align:center"> = </td><td>${
+  }%)</td></tr><tr><td>\u{1F494}</td><td>${totalBad2}</td></tr><tr><td style="text-align:center"><b>=</b></td><td><b>${
     totalGood + totalBad2
-  }</td></tr><tr><td>&nbsp</td></tr><tr><td>\u{274C}</td><td>${
+  }</b></td></tr><tr><td>&nbsp</td></tr><tr><td>\u{274C}</td><td>${
     window.errorIntervalCounter > window.maxError
       ? '*'
       : window.errorIntervalCounter
