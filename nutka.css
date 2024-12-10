@@ -79,6 +79,14 @@ body {
   padding: 1rem;
 }
 
+#numStatTable {
+  padding: 1rem;
+  /* background: mistyrose;*/
+  border: 5px solid red;
+  border-radius: 30px;
+  /* font-size */
+}
+
 #chartStatsDiv {
   width: 70%;
   height: 90%;
@@ -178,18 +186,13 @@ body {
   display: inline-block;
   border-radius: 50%;
   border-width: 0.5px;
-  background-color: #fff4cd;
+  background-color: lemonchiffon;
   position: absolute;
   user-select: none;
   /* height */
   /* width */
   /* font-size */
 }
-
-/* .interval-button:hover {
-  background-color: blue;
-  color: #fff4cd;
-} */
 
 .interval-button:disabled {
   background-color: white;

@@ -219,5 +219,10 @@ function getElementCSS() {
     ['#reset-btn', 'height', `${mainRefSize * 4 * window.unitToPixel}px`], //2
     ['#stat-label-container', 'font-size', `13px`], //2
     ['#infoDiv', 'font-size', `${mainRefSize * window.unitToPixel}px`], //2
+    [
+      '#numStatTable',
+      'font-size',
+      `${mainRefSize * 1.5 * window.unitToPixel}px`,
+    ], //2
   ];
 }

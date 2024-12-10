@@ -112,9 +112,7 @@ function drawNumericStatContainer() {
   numericStatContainer.id = 'numStatsDivTxt';
 
   // Create and style each span element
-  const totalRight = document.createElement('span');
-  const totalWrong = document.createElement('span');
-  const totalCount = document.createElement('span');
+  const totals = document.createElement('span');
   const insertBrake = document.createElement('span');
   const totalPercentRight = document.createElement('span');
   const totalIncorrectGuess = document.createElement('span');
@@ -124,9 +122,7 @@ function drawNumericStatContainer() {
 
   // Set the font size and display style for all spans
   [
-    totalRight,
-    totalWrong,
-    totalCount,
+    totals,
     insertBrake,
     totalPercentRight,
     totalIncorrectGuess,
@@ -146,19 +142,17 @@ function drawNumericStatContainer() {
     window.globalIntervalStats.reduce((sum, stat) => sum + stat.bad2, 0) +
     window.errorIntervalCounter; //te o których jeszcze nie wie użytkownik;
 
-  totalRight.innerHTML = `\u{2B50} ${totalGood} (${
+  totals.innerHTML = `<table id=NumStatTable><tr><td>\u{2B50}</td><td>${totalGood} (${
     totalBad2 + totalGood > 0
       ? (100 * (totalGood / (totalBad2 + totalGood))).toFixed(0)
       : '---'
-  }%)`;
-  totalWrong.innerHTML = `\u{1F494} ${totalBad2}`;
-  totalCount.innerHTML = `<small>&nbsp</small> = &nbsp${totalGood + totalBad2}`;
-  insertBrake.innerHTML = '&nbsp';
-  totalIncorrectGuess.innerHTML = `\u{274C} ${
+  }%)</td></tr><tr><td>\u{1F494}</td><td>${totalBad2}</td></tr><tr><td style="text-align:center"> = </td><td>${
+    totalGood + totalBad2
+  }</td></tr><tr><td>&nbsp</td></tr><tr><td>\u{274C}</td><td>${
     window.errorIntervalCounter > window.maxError
       ? '*'
       : window.errorIntervalCounter
-  } / ${window.maxError}`;
+  } / ${window.maxError}</td></tr></td></tr></table>`;
 
   function getIntervalForHighest(field) {
     const maxFieldIndex = window.globalIntervalStats.reduce(
