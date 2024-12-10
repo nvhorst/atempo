@@ -50,9 +50,8 @@ function elementControlContainer() {
           // console.log(`Cannot deselect all options in group "${controlType}"`);
         }
 
-        // Log the current state of the checkbox and group
-        console.log(`${option} toggled to:`, checkbox.checked);
-        console.log('Current group state:', window.soundControl[controlType]);
+        // console.log(`${option} toggled to:`, checkbox.checked);
+        // console.log('Current group state:', window.soundControl[controlType]);
       });
 
       controlSubContainer.appendChild(controlButton);
@@ -155,7 +154,6 @@ function elementSoundVolume(init) {
   // Add event listener
   select.addEventListener('change', () => {
     window.soundVolume = select.value;
-    console.log('window.soundVolume=', window.soundVolume);
   });
 
   // Initialize soundVolume
