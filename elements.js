@@ -14,6 +14,25 @@ function updateCSSRulesFromArray(elementSizes) {
       }
     }
   });
+
+  //nagłówek: infoDiv i soundVolumeDiv = KONIECZNIE PO PRZERYSOWANIU OKNA!
+  const infoDiv = document.getElementById('infoDiv');
+  infoDiv.style.flexDirection = 'column'; //RESET! w przeciwnym razie nie wykrywa overflow...!!!
+
+  infoDiv.style.flexDirection = isOverflowing(
+    document.getElementById('pianoContainer')
+  ).vertical
+    ? 'row'
+    : 'column';
+
+  const elementSoundVolume = document.getElementById('elementSoundVolume');
+
+  elementSoundVolume.style.flexDirection =
+    isOverflowing(document.getElementById('pianoContainer')).vertical &&
+    infoDiv.style.flexDirection === 'row' &&
+    elementSoundVolume.style.order === 2
+      ? 'row'
+      : 'column';
 }
 
 //CZY ELEMENT WYSTAJE?
@@ -29,22 +48,6 @@ function isOverflowing(element) {
 
 //PRZELICZ LAYOUT
 function getElementCSS() {
-  //nagłówek: infoDiv i soundVolumeDiv
-  const infoDiv = document.getElementById('infoDiv');
-  infoDiv.style.flexDirection = isOverflowing(
-    document.getElementById('pianoContainer')
-  ).vertical
-    ? 'row'
-    : 'column';
-
-  const elementSoundVolume = document.getElementById('elementSoundVolume');
-
-  elementSoundVolume.style.flexDirection =
-    isOverflowing(document.getElementById('pianoContainer')).vertical &&
-    infoDiv.style.flexDirection === 'row'
-      ? 'row'
-      : 'column';
-
   //przelicz główne koordynaty
   window.unitToPixel = !isPortrait ? window.innerHeight : window.innerWidth;
   window.unitToPixel /= 100;
