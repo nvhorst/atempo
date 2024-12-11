@@ -136,6 +136,7 @@ function elementSoundVolume(init) {
 
   //wybory
   ['20%', '40%', '60%', '80%', '100%'].forEach((labelText, i) => {
+    console.log('i=', i);
     const option = document.createElement('option');
     option.value = (i + 1) * 20; //numer
     option.textContent = labelText; //tekst

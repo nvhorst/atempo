@@ -40,7 +40,6 @@ function refreshCharts() {
 
 //USTAW PARAMETRY DŹWIĘKU DO ODTWORZENIA
 function applySoundSettings() {
-  console.log('in!');
   function selectOrRandomize(controlGroup, valueMapping = null) {
     const selectedKeys = Object.keys(controlGroup).filter(
       (key) => controlGroup[key] === 1
@@ -215,7 +214,7 @@ function createIntervalButton(index, label) {
     intervalButton.style.color = 'white';
   });
 
-  intervalButton.addEventListener('mouseenter', function eventMouseEnter() {
+  intervalButton.addEventListener('mouseleave', function eventMouseLeave() {
     intervalButton.style.background = '';
     intervalButton.style.color = '';
   });

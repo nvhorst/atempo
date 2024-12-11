@@ -223,6 +223,22 @@ function getElementCSS() {
       'margin-left',
       `${mainRefSize * 0.3 * window.unitToPixel}px`,
     ], //2.5
+    [
+      '.control-button-pause-icon',
+      'width',
+      `${mainRefSize * 0.7 * window.unitToPixel}px`,
+    ], //2.5
+    [
+      '.control-button-pause-icon',
+      'height',
+      `${mainRefSize * 1.6 * window.unitToPixel}px`,
+    ], //2.5
+
+    [
+      '.control-button-pause-icon',
+      'margin-left',
+      `${mainRefSize * 0.3 * window.unitToPixel}px`,
+    ], //2.5
     ['.control-checkbox', 'width', `${mainRefSize * 1 * window.unitToPixel}px`],
     [
       '.control-checkbox',

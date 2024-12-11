@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: black;
 }
 
 html {
@@ -193,11 +194,17 @@ body {
   border-radius: 50%;
   border-width: 0.5px;
   background-color: lemonchiffon;
+  color: black;
   position: absolute;
   user-select: none;
   /* height */
   /* width */
   /* font-size */
+}
+
+/* BUG w IOS! */
+a:link {
+  color: blue;
 }
 
 .interval-button:disabled {
@@ -448,21 +455,30 @@ span {
 }
 
 /* opis przycisku */
-.control-button-label {
-  user-select: none;
-  cursor: pointer;
-  /* margin-left */
-  /* font-size */
-}
+/* .control-button-label { */
+/* user-select: none; */
+/* cursor: pointer; */
+/* margin-left */
+/* font-size */
+/* } */
 
 .control-button-label svg {
   background: greenyellow;
+  user-select: none;
   /* width */
   /* height */
 }
 
 /* ikonki dla nutek */
 .control-button-note-icon {
+  user-select: none;
+  cursor: pointer;
+  /* margin-left */
+  /* height */
+}
+.control-button-pause-icon {
+  user-select: none;
+  cursor: pointer;
   /* margin-left */
   /* height */
 }
